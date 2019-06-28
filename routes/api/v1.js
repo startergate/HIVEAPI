@@ -40,6 +40,8 @@ router.get('/search/:movie', (req, res, next) => {
 
     const $bodyList = $("li.css-106b4k6-Self");
 
+    console.log($bodyList.length);
+
     $bodyList.each(function(i, elem) {
       result.result[$(this).find('a').attr('href').replace('/ko-KR/contents/', '')] = $(this).find('.css-gt67eo-TopResultItemTitle').text();
     });
@@ -49,10 +51,6 @@ router.get('/search/:movie', (req, res, next) => {
     res.status(500).send(err);
   });
   return;
-});
-
-router.get('/search/watcha/:movie', (req, res, next) => {
-
 });
 
 router.get('/search/imdb/:movie', (req, res, next) => {
