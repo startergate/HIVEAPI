@@ -37,14 +37,15 @@ router.get('/search/:movie', (req, res, next) => {
     },
     timeout: 3000
   }).then(response => {
-    const $ = cheerio.load(response);
+    console.log(response);
+    const $ = cheerio.load(response.data.split('&quot;').join('"'));
 
-    const $bodyList = $("li.css-106b4k6-Self");
+    const $bodyList = $(".css-106b4k6-Self");
 
     console.log($bodyList.length);
 
     $bodyList.each(function(i, elem) {
-      result.result[$(this).find('a').attr('href').replace('/ko-KR/contents/', '')] = $(this).find('.css-gt67eo-TopResultItemTitle').text();
+      result.result[$(this).find('a').attr('href').replace('/ko-KR/contents/', '')] = $(this).find($('.css-gt67eo-TopResultItemTitle')).text();
     });
     res.send(result);
   }).catch(err => {
