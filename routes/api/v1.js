@@ -34,7 +34,8 @@ router.get('/search/:movie', (req, res, next) => {
   instance.get('/search', {
     params: {
       'query': req.params.movie
-    }
+    },
+    timeout: 3000
   }).then(response => {
     const $ = cheerio.load(response);
 
