@@ -1,10 +1,8 @@
 /*jshint esversion: 9 */
 
 const express = require('express');
-const request = require('request');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const iconv = require('iconv-lite');
 const getHtml = require('../../models/axiosRequest');
 const router = express.Router();
 
@@ -37,15 +35,23 @@ router.get('/search/:movie', (req, res, next) => {
     },
     timeout: 3000
   }).then(response => {
-    console.log(response);
     const $ = cheerio.load(response.data.split('&quot;').join('"'));
 
     const $bodyList = $(".css-106b4k6-Self");
 
-    console.log($bodyList.length);
-
     $bodyList.each(function(i, elem) {
-      result.result[$(this).find('a').attr('href').replace('/ko-KR/contents/', '')] = $(this).find($('.css-gt67eo-TopResultItemTitle')).text();
+      let watchaid = $(this).find('a').attr('href').replace('/ko-KR/contents/', '');
+      result.result[watchaid] = {
+        title: $(this).find($('.css-gt67eo-TopResultItemTitle')).text(),
+        //poster: $(this).find($('.ewlo9841'))[0].attr('src')
+      };
+      if (!res.headersSent) {
+        console.log($(this).find('a').html());
+        console.log($(this).find($('.ewlo9840')).html());
+        console.log($(this).find($('.ewlo9840')).length);
+      }
+
+      //console.log($(this).find($('.css-p4k02n-Image-LazyLoadingImg')).html());
     });
     res.send(result);
   }).catch(err => {
@@ -63,7 +69,7 @@ router.get('/movie/:id', (req, res, next) => {
 
 });
 
-router.get('/movie/watcha/:id', (req, res, next) => {
+router.get('/movie/imdb/:id', (req, res, next) => {
   if (true) {
 
   }
