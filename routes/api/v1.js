@@ -45,11 +45,11 @@ router.get('/search/:movie', (req, res, next) => {
         title: $(this).find($('.css-gt67eo-TopResultItemTitle')).text(),
         //poster: $(this).find($('.ewlo9841'))[0].attr('src')
       };
-      if (!res.headersSent) {
+      /*if (!res.headersSent) {
         console.log($(this).find('a').html());
         console.log($(this).find($('.ewlo9840')).html());
         console.log($(this).find($('.ewlo9840')).length);
-      }
+      }*/
 
       //console.log($(this).find($('.css-p4k02n-Image-LazyLoadingImg')).html());
     });
