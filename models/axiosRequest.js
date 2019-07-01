@@ -3,12 +3,14 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const getHtml = async url => {
-  try {
-    return await axios.get(url);
-  } catch (error) {
-    console.error(error);
-  }
+const createInstance = (url) => {
+  axios.create({
+    baseURL: url,
+    timeout: 3000,
+    headers: {
+      'Host': url.split('://')[1].split('/')[0]
+    }
+  });
 };
 
-module.exports = getHtml;
+module.exports = createInstance;

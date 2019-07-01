@@ -3,7 +3,8 @@
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const getHtml = require('../../models/axiosRequest');
+const createInstance = require('../../models/axiosRequest');
+const movie = require('../../modules/movieSync');
 const router = express.Router();
 
 /* GET home page. */
@@ -21,13 +22,7 @@ router.get('/search/:movie', (req, res, next) => {
   var result = {
     result: {}
   };
-  const instance = axios.create({
-    baseURL: 'https://watcha.com/ko-KR/',
-    timeout: 1000,
-    headers: {
-      'Host': 'watcha.com'
-    }
-  });
+  const instance = createInstance("https://watcha.com/ko-KR/");
 
   instance.get('/search', {
     params: {
@@ -66,7 +61,33 @@ router.get('/search/imdb/:movie', (req, res, next) => {
 });
 
 router.get('/movie/:id', (req, res, next) => {
+  const instance = axios.create({
+    baseURL: 'https://watcha.com/ko-KR/',
+    timeout: 1000,
+    headers: {
+      'Host': 'watcha.com'
+    }
+  });
 
+  instance.get('/search', {
+    params: {
+      'query': req.params.movie
+    },
+    timeout: 3000
+  }).then(response => {
+    const $ = cheerio.load(response.data.split('&quot;').join('"'));
+
+    const $bodyList = $(".css-106b4k6-Self");
+
+    $bodyList.each(function(i, elem) {
+      let watchaid = $(this).find('a').attr('href').replace('/ko-KR/contents/', '');
+      result.result[watchaid] = {
+        title: $(this).find($('.css-gt67eo-TopResultItemTitle')).text(),
+        release: "",
+      };
+    });
+    res.send(result);
+  });
 });
 
 router.get('/movie/imdb/:id', (req, res, next) => {
