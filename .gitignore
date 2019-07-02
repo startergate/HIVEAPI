@@ -47,3 +47,4 @@ secrets.sh
 
 # Local dev bundle
 local-dev/bundle.js
+modules/userGetter.js
