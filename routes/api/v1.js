@@ -38,6 +38,7 @@ router.get('/search/:movie', (req, res, next) => {
       let watchaid = $(this).find('a').attr('href').replace('/ko-KR/contents/', '');
       result.result[watchaid] = {
         title: $(this).find($('.css-gt67eo-TopResultItemTitle')).text(),
+        type: $(this).find($('.css-nk1bpv-TopResultContentType')).text()
         //poster: $(this).find($('.ewlo9841'))[0].attr('src')
       };
       /*if (!res.headersSent) {
