@@ -6,11 +6,14 @@ const mongoUser = require('../modules/userGetter');
 
 const url = `mongodb://${mongoUser.id}:${mongoUser.pw}@54.180.27.126:27017`;
 // Database Name
-var dbo;
+var db;
 const dbName = 'hive';
-MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err);
-  dbo = client.db(dbName);
+console.log(url);
+MongoClient.connect(url, {
+  useNewUrlParser: true
+}).then(client => {
+  db = client.db(dbName);
+  console.log(db);
+}).catch(err => {
+  throw err;
 });
-
-module.exports = dbo;

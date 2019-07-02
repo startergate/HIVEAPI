@@ -33,6 +33,7 @@ router.get('/search/:movie', (req, res, next) => {
     const $ = cheerio.load(response.data.split('&quot;').join('"'));
 
     const $bodyList = $(".css-106b4k6-Self");
+    var wids = [];
 
     $bodyList.each(function(i, elem) {
       let watchaid = $(this).find('a').attr('href').replace('/ko-KR/contents/', '');
@@ -48,11 +49,16 @@ router.get('/search/:movie', (req, res, next) => {
       }*/
 
       //console.log($(this).find($('.css-p4k02n-Image-LazyLoadingImg')).html());
+      wids.push(watchaid);
     });
     res.send(result);
+    movie.movie(wids);
+
   }).catch(err => {
     console.log(err);
-    res.status(500).send(err);
+    if (!res.headersSent) {
+      res.status(500).send(err);
+    }
   });
   return;
 });

@@ -3,7 +3,8 @@
 const axios = require("axios");
 
 const createInstance = (url) => {
-  axios.create({
+  console.log(url.split('://')[1].split('/')[0]);
+  return axios.create({
     baseURL: url,
     timeout: 3000,
     headers: {
