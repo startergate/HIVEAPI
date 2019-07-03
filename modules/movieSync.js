@@ -12,11 +12,9 @@ class HIVEMovieUpdater {
     // 왓챠 정보 열람 (제목, 년도, 영문 이름,)
     for (var i in watchaID) {
       let j = i;
-      db.collection("movie").findOne({
-        watchaid: watchaID[j]
-      }, (err, res) => {
+      db.findMovie(watchaID[j], (err, res) => {
         if (err) throw err;
-        //console.log(res);
+        console.log(res);
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
         instanceWatcha.get(`/contents/${res.watchaid}`, {
           timeout: 3000
@@ -25,7 +23,7 @@ class HIVEMovieUpdater {
 
           const nameKO = $(".css-106b4k6-Self").text();
 
-          db.collection("movie").insertOne({
+          db.insertMovie({
             wid: res.watchaid,
             title: nameKO
           });

@@ -13,7 +13,27 @@ MongoClient.connect(url, {
   useNewUrlParser: true
 }).then(client => {
   db = client.db(dbName);
+  db.movie = db.collection('movie');
+  db.user = db.collection('user');
   console.log(db);
 }).catch(err => {
   throw err;
 });
+
+exports.findMovie = (watchaid, callback) => {
+  db.movie.findOne({
+    wid: watchaid
+  }, callback);
+};
+
+exports.insertMovie = (docs, callback) => {
+  db.movie.insertOne(docs, callback);
+};
+
+exports.updateMovie = (watchaid, docs, callback) => {
+  db.movie.updateOne({
+    wid: watchaid
+  }, {
+    $set: docs
+  }, callback);
+};
