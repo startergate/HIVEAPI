@@ -15,7 +15,6 @@ MongoClient.connect(url, {
   db = client.db(dbName);
   db.movie = db.collection('movie');
   db.user = db.collection('user');
-  console.log(db);
 }).catch(err => {
   throw err;
 });

@@ -7,25 +7,26 @@ const createInstance = require('../models/axiosRequest');
 
 class HIVEMovieUpdater {
   movie(watchaID) {
-    console.log(db);
     if (watchaID.length < 1) return;
     // 왓챠 정보 열람 (제목, 년도, 영문 이름,)
     for (var i in watchaID) {
       let j = i;
       db.findMovie(watchaID[j], (err, res) => {
         if (err) throw err;
-        console.log(res);
+        if (res) return;
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
-        instanceWatcha.get(`/contents/${res.watchaid}`, {
-          timeout: 3000
+        instanceWatcha.get(`/contents/${watchaID[j]}`, {
+          timeout: 10000
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
-
-          const nameKO = $(".css-106b4k6-Self").text();
-
+          const $movieinfo = $('.css-13h49w0-PaneInner');
+          const nameKO = $movieinfo.find($('.css-13a04pq-Title')).text();
+          const releaseYear = $movieinfo.find($('.css-w4pu2t-Detail')).text().split(' ・ ')[0];
           db.insertMovie({
-            wid: res.watchaid,
-            title: nameKO
+            wid: watchaID[j],
+            title: nameKO,
+            released: releaseYear,
+            lastUpdate: new Date()
           });
         });
       });
