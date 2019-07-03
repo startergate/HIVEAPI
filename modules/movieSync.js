@@ -20,6 +20,8 @@ class HIVEMovieUpdater {
         if (err) throw err;
         if (res) return;
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
+        const instanceImdb = createInstance("https://www.imdb.com/");
+        const instanceNaver = createInstance("https://movie.naver.com/movie");
         instanceWatcha.get(`/contents/${watchaID[j]}`, {
           timeout: 10000
         }).then(response => {
@@ -31,19 +33,63 @@ class HIVEMovieUpdater {
             wid: watchaID[j],
             title: nameKO,
             released: releaseYear,
-            lastUpdate: new Date()
+            lastUpdate: new Date(0)
           });
-        }).then(_ => {
-          instanceWatcha.get(`/contents/${watchaID[j]}/`, {
+          return new Promise((resolve, reject) => {
+            resolve(nameKO, releaseYear);
+          });
+        }).then((title, year) => {
+          instanceWatcha.get(`/contents/${watchaID[j]}/overview`, {
             timeout: 3000
           }).then(response => {
             const $ = cheerio.load(response.data.split('&quot;').join('"'));
             let $info = $(".e1eaz83l0");
-            const nameEN = $info.find($('.e1eaz83l3')).text();
+            let nameEN = $info.find($('.e1eaz83l3')).first().text();
+            if (words_in_text([nameEn]).length == 1) {
+              nameEN = '-';
+            }
             db.updateMovie(watchaID[j], {
               title_en: nameEN
             });
+            return new Promise((resolve, reject) => {
+              resolve(nameEN)
+            });
+          }).then(title => {
+            instanceNaver.get('/search/result.nhn', {
+              params: {
+                query: title + ' ' + year,
+                section: 'all'
+              }
+            }).then(response => {
+              const $ = cheerio.load(response.data.split('&quot;').join('"'));
+              const $result = $(".search_list_1 > li");
+              var naverid;
+              $result.each(function(index, el) {
+                var yearlocal = 0;
+                $(this).find($('dd.etc > a')).each(function(index, el) {
+                  if ($(this).attr('href').spilt('year').length === 2) {
+                    yearlocal = $(this).text();
+                  }
+                });
+                if (year == yearlocal) {
+                  naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('');
+                }
+              });
+              console.log(yearlocal);
+              if (naverid) {
+                db.updateMovie(watchaID[j], {
+                  nid: naverid
+                });
+              }
+
+              return new Promise((resolve, reject) => {
+                resolve(naverid);
+              }).then((naverid) => {
+                instanceNaver.get('/search/result.nhn', {
+                  params: {
+                    query: title + ' ' + year,
                     section: 'all'
+                  }
                 }).then(response => {
                   const $ = cheerio.load(response.data.split('&quot;').join('"'));
                 })
