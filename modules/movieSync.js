@@ -28,10 +28,20 @@ class HIVEMovieUpdater {
             released: releaseYear,
             lastUpdate: new Date()
           });
+        }).then(_ => {
+          instanceWatcha.get(`/contents/${watchaID[j]}/`, {
+            timeout: 3000
+          }).then(response => {
+            const $ = cheerio.load(response.data.split('&quot;').join('"'));
+            let $info = $(".e1eaz83l0");
+            const nameEN = $info.find($('.e1eaz83l3')).text();
+            db.updateMovie(watchaID[j], {
+              title_en: nameEN
+            });
+          });
+          this.update(watchaID);
         });
       });
-
-      this.update(watchaID);
     }
   }
 
