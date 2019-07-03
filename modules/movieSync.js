@@ -91,6 +91,13 @@ class HIVEMovieUpdater {
                   }
                 }).then(response => {
                   const $ = cheerio.load(response.data.split('&quot;').join('"'));
+                  let $infoarea = $('.mv_info_area');
+                  let nameEN = $infoarea.find($('strong.h_movie2')).text().split(',')[0];
+                  if (words_in_text([nameEn]).length < 1) {
+                    db.updateMovie(watchaID[j], {
+                      title_en: nameEN
+                    });
+                  }
                 })
               });
             });
