@@ -85,10 +85,9 @@ class HIVEMovieUpdater {
               return new Promise((resolve, reject) => {
                 resolve(naverid);
               }).then((naverid) => {
-                instanceNaver.get('/search/result.nhn', {
+                instanceNaver.get('/bi/mi/basic.nhn', {
                   params: {
-                    query: title + ' ' + year,
-                    section: 'all'
+                    code: naverid
                   }
                 }).then(response => {
                   const $ = cheerio.load(response.data.split('&quot;').join('"'));
