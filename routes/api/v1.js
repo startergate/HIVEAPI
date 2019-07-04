@@ -37,19 +37,14 @@ router.get('/search/:movie', (req, res, next) => {
 
     $bodyList.each(function(i, elem) {
       let watchaid = $(this).find('a').attr('href').replace('/ko-KR/contents/', '');
+      //if ($(this).find($('.css-nk1bpv-TopResultContentType')).text() in ['영화', 'TV']) {
       result.result[watchaid] = {
         title: $(this).find($('.css-gt67eo-TopResultItemTitle')).text(),
         type: $(this).find($('.css-nk1bpv-TopResultContentType')).text()
         //poster: $(this).find($('.ewlo9841'))[0].attr('src')
       };
-      /*if (!res.headersSent) {
-        console.log($(this).find('a').html());
-        console.log($(this).find($('.ewlo9840')).html());
-        console.log($(this).find($('.ewlo9840')).length);
-      }*/
-
-      //console.log($(this).find($('.css-p4k02n-Image-LazyLoadingImg')).html());
       wids.push(watchaid);
+      //}
     });
     res.send(result);
     movie.movie(wids);
@@ -57,7 +52,9 @@ router.get('/search/:movie', (req, res, next) => {
   }).catch(err => {
     console.log(err);
     if (!res.headersSent) {
-      res.status(500).send(err);
+      res.status(500).send({
+        err: "Can't Fetch Watcha"
+      });
     }
   });
   return;

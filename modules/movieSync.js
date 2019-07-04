@@ -39,70 +39,56 @@ class HIVEMovieUpdater {
             resolve(nameKO, releaseYear);
           });
         }).then((title, year) => {
-          instanceWatcha.get(`/contents/${watchaID[j]}/overview`, {
-            timeout: 10000
-          }).then((response) => {
-            const $ = cheerio.load(response.data.split('&quot;').join('"'));
-            let $info = $(".e1eaz83l0");
-            let nameEN = $info.find($('.e1eaz83l3')).first().text();
-            if (!this.isPrintableASCII(nameEN)) {
-              nameEN = '-';
-            }
-            db.updateMovie(watchaID[j], {
-              title_en: nameEN
-            });
-            return new Promise((resolve, reject) => {
-              resolve(nameEN, year);
-            });
-          }).then((title, year) => {
-            instanceNaver.get('/search/result.nhn', {
-              params: {
-                query: title,
-                section: 'all'
-              }
-            }).then(response => {
+          db.findMovie(watchaID[j], (err, res) => {
+            instanceWatcha.get(`/contents/${watchaID[j]}/overview`, {
+              timeout: 10000
+            }).then((response) => {
               const $ = cheerio.load(response.data.split('&quot;').join('"'));
-              const $result = $(".search_list_1 > li");
-              var naverid;
-              console.log($result.length);
-              db.findMovie(watchaID[j], (err, res) => {
-                $result.each(function(index, el) {
-                  let yearlocal = 0;
-                  naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('');
-                  $(this).find($('dd.etc > a')).each(function(index, el) {
-                    console.log($(this).attr('href'));
-                    if ($(this).attr('href').includes('year')) {
-                      yearlocal = $(this).text();
-                    }
-                  });
-                  console.log(res.released);
-                  console.log(yearlocal);
-                  if (res.released == yearlocal) {
-                    db.updateMovie(watchaID[j], {
-                      nid: naverid
-                    });
-                  }
-                });
+              let $info = $(".e1eaz83l0");
+              let nameEN = $info.find($('.e1eaz83l3')).first().text();
+              if (!this.isPrintableASCII(nameEN)) {
+                nameEN = '-';
+              }
+              db.updateMovie(watchaID[j], {
+                title_en: nameEN
               });
-
               return new Promise((resolve, reject) => {
-                resolve(naverid);
-              })
-            }).then((naverid) => {
-              instanceNaver.get('/bi/mi/basic.nhn', {
+                resolve(nameEN, year);
+              });
+            }).then((title, year) => {
+              if (title == '-') return;
+              instanceNaver.get('/search/result.nhn', {
                 params: {
-                  code: naverid
+                  query: title,
+                  section: 'all'
                 }
               }).then(response => {
                 const $ = cheerio.load(response.data.split('&quot;').join('"'));
-                let $infoarea = $('.mv_info_area');
-                let nameEN = $infoarea.find($('strong.h_movie2')).text().split(',')[0];
-                if (!this.isPrintableASCII(nameEN)) {
-                  db.updateMovie(watchaID[j], {
-                    title_en: nameEN
+                const $result = $(".search_list_1 > li");
+                var naverid;
+                console.log($result.length);
+                db.findMovie(watchaID[j], (err, res) => {
+                  $result.each(function(index, el) {
+                    let yearlocal = 0;
+                    naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('');
+                    $(this).find($('dd.etc > a')).each(function(index, el) {
+                      console.log($(this).attr('href'));
+                      if ($(this).attr('href').includes('year')) {
+                        yearlocal = $(this).text();
+                      }
+                    });
+                    console.log(res.released);
+                    console.log(yearlocal);
+                    if (res.released == yearlocal) {
+                      db.updateMovie(watchaID[j], {
+                        nid: naverid
+                      });
+                    }
                   });
-                }
-              });
+                });
+              }); // 네이버 영화 ID 처리
+
+              instanceImdb.get('');
             });
           });
           this.update(watchaID);
