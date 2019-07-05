@@ -21,6 +21,7 @@ class HIVEMovieUpdater {
         if (res) return;
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
         const instanceImdb = createInstance("https://www.imdb.com/");
+        const instanceRotten = createInstance("https://www.rottentomatoes.com/");
         const instanceNaver = createInstance("https://movie.naver.com/movie");
         instanceWatcha.get(`/contents/${watchaID[j]}`, {
           timeout: 10000
@@ -97,6 +98,19 @@ class HIVEMovieUpdater {
                   iid: target.attr('href').split('/')[2]
                 });
               });
+
+              /*instanceRotten.get('/search/', {
+                params: {
+                  search: enMovieSearchQuery
+                }
+              }).then(response => {
+                const $ = cheerio.load(response.data.split('&quot;').join('"'));
+                let $table = $(".results_ul");
+                let target = $table.find($('span.bold')).first().find('a');
+                db.updateMovie(watchaID[j], {
+                  iid: target.attr('href').split('/')[2]
+                });
+              });*/
             });
           });
           this.update(watchaID);
