@@ -24,7 +24,7 @@ class HIVEMovieUpdater {
         }
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
         const instanceImdb = createInstance("https://www.imdb.com/");
-        const instanceRotten = createInstance("https://www.rottentomatoes.com/");
+        //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
         const instanceNaver = createInstance("https://movie.naver.com/movie");
         instanceWatcha.get(`/contents/${watchaID[j]}`, {
           timeout: 10000
@@ -60,8 +60,9 @@ class HIVEMovieUpdater {
             });
           }).then((title, year) => {
             if (title == '-') return;
+            let promises = [];
             db.findMovie(watchaID[j], (err, res) => {
-              instanceNaver.get('/search/result.nhn', {
+              promises.push(instanceNaver.get('/search/result.nhn', {
                 params: {
                   query: title,
                   section: 'movie'
@@ -86,10 +87,10 @@ class HIVEMovieUpdater {
                     }
                   });
                 });
-              }); // 네이버 영화 ID 처리
+              })); // 네이버 영화 ID 처리
 
               let enMovieSearchQuery = urlencode(`${title} (${res.released})`);
-              instanceImdb.get('/find', {
+              promises.push(instanceImdb.get('/find', {
                 params: {
                   q: enMovieSearchQuery.split('%20').join('+')
                 }
@@ -100,7 +101,7 @@ class HIVEMovieUpdater {
                 db.updateMovie(watchaID[j], {
                   iid: target.attr('href').split('/')[2]
                 });
-              });
+              }));
 
               /*instanceRotten.get('/search/', {
                 params: {
@@ -114,12 +115,10 @@ class HIVEMovieUpdater {
                   iid: target.attr('href').split('/')[2]
                 });
               });*/
+              Promise.all(promises).then(_ => {
+                this.update(watchaID);
+              });
             });
-            return new Promise((resolve, reject) => {
-              resolve()
-            });
-          }).then(_ => {
-            this.update(watchaID);
           });
         });
       });
@@ -128,7 +127,27 @@ class HIVEMovieUpdater {
 
   update(watchaID) {
     // 메타크리틱, 로튼 토마토, 네이버 영화, IMDB 스코어 업데이트
+    const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
+    const instanceImdb = createInstance("https://www.imdb.com/");
+    //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
+    const instanceNaver = createInstance("https://movie.naver.com/movie");
 
+    for (var i in watchaID) {
+      let j = i;
+      db.findMovie(watchaID[j], (err, res) => {
+        if (res.iid) {
+          instanceImdb.get(`/title/${res.iid}/`, {
+            timeout: 3000
+          }).then(response => {
+            const $ = cheerio.load(response.data.split('&quot;').join('"'));
+            let $iScore = $('[itemprop=ratingValue]');
+            db.updateMovie(watchaID[j], {
+              'critics.imdb': $iScore.text()
+            })
+          });
+        }
+      });
+    }
     // 넷플릭스, 왓챠, 아마존 판매 조회
 
     if (true) {
