@@ -2,6 +2,7 @@
 
 const axios = require('axios');
 const cheerio = require('cheerio');
+const urlencode = require('urlencode');
 const db = require('../models/mongoConnect');
 const createInstance = require('../models/axiosRequest');
 
@@ -54,33 +55,49 @@ class HIVEMovieUpdater {
               resolve(nameEN, year);
             });
           }).then((title, year) => {
-            instanceNaver.get('/search/result.nhn', {
-              params: {
-                query: title,
-                section: 'movie'
-              }
-            }).then(response => {
-              const $ = cheerio.load(response.data.split('&quot;').join('"'));
-              const $result = $(".search_list_1 > li");
-              var naverid;
-              db.findMovie(watchaID[j], (err, res) => {
-                $result.each(function(index, el) {
-                  let yearlocal = 0;
-                  naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('');
-                  $(this).find($('dd.etc > a')).each(function(index, el) {
-                    if ($(this).attr('href').includes('year')) {
-                      yearlocal = $(this).text();
+            if (title == '-') return;
+            db.findMovie(watchaID[j], (err, res) => {
+              instanceNaver.get('/search/result.nhn', {
+                params: {
+                  query: title,
+                  section: 'movie'
+                }
+              }).then(response => {
+                const $ = cheerio.load(response.data.split('&quot;').join('"'));
+                const $result = $(".search_list_1 > li");
+                var naverid;
+                db.findMovie(watchaID[j], (err, res) => {
+                  $result.each(function(index, el) {
+                    let yearlocal = 0;
+                    naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('');
+                    $(this).find($('dd.etc > a')).each(function(index, el) {
+                      if ($(this).attr('href').includes('year')) {
+                        yearlocal = $(this).text();
+                      }
+                    });
+                    if (res.released == yearlocal) {
+                      db.updateMovie(watchaID[j], {
+                        nid: naverid
+                      });
                     }
                   });
-                  if (res.released == yearlocal) {
-                    db.updateMovie(watchaID[j], {
-                      nid: naverid
-                    });
-                  }
+                });
+              }); // 네이버 영화 ID 처리
+
+              let enMovieSearchQuery = urlencode(`${title} (${res.released})`);
+              instanceImdb.get('/find', {
+                params: {
+                  q: enMovieSearchQuery.split('%20').join('+')
+                }
+              }).then(response => {
+                const $ = cheerio.load(response.data.split('&quot;').join('"'));
+                let $table = $("table.findList");
+                let target = $table.find('tr > td.result_text').first().find('a');
+                db.updateMovie(watchaID[j], {
+                  iid: target.attr('href').split('/')[2]
                 });
               });
-            }); // 네이버 영화 ID 처리
-
+            });
           });
           this.update(watchaID);
         });
