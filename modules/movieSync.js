@@ -18,7 +18,10 @@ class HIVEMovieUpdater {
       let j = i;
       db.findMovie(watchaID[j], (err, res) => {
         if (err) throw err;
-        if (res) return;
+        if (res) {
+          this.update(watchaID);
+          return;
+        }
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
         const instanceImdb = createInstance("https://www.imdb.com/");
         const instanceRotten = createInstance("https://www.rottentomatoes.com/");
@@ -112,8 +115,12 @@ class HIVEMovieUpdater {
                 });
               });*/
             });
+            return new Promise((resolve, reject) => {
+              resolve()
+            });
+          }).then(_ => {
+            this.update(watchaID);
           });
-          this.update(watchaID);
         });
       });
     }
