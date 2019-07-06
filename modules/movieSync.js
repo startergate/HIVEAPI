@@ -131,7 +131,7 @@ class HIVEMovieUpdater {
     const instanceImdb = createInstance("https://www.imdb.com/");
     //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
     const instanceNaver = createInstance("https://movie.naver.com/movie");
-    const instanceNetflix = createInstance("https://www.netflix.com/");
+    //const instanceNetflix = createInstance("https://www.netflix.com/");
 
     db.findMovie(watchaID, (err, res) => {
       if (res.hasOwnProperty('iid')) {
@@ -178,10 +178,28 @@ class HIVEMovieUpdater {
         });
       }
 
-      instanceNetflix.get('/search', {
+      /*instanceNetflix.get('/search', {
         params: {
           q: urlencode(res.title)
         },
+        timeout: 3000,
+        headers: {
+          'cookie': 'nfvdid=BQFmAAEBENTGLCcQMnSwN0JzL91Go51Ai0T2dw7lq-6rFqk4HhFPz0x603eeyE0LC3NU4b69U-5iBZ44yVIfrXoFi5AMrg2MzLxkDF8uXHD6lWeUjPh9LQ%3D%3D; memclid=09086659-a4f9-4fed-8c00-e08652fcd091; NetflixId=v%3D2%26ct%3DBQAOAAEBEC0b1-_apvedl6Ea2Affyv6A8GMutT0q5xEwUNW8ZIhyD8rHk-VE8UPaxPUQbq94vc5YKvCpLF__YsdZ9mUcfCtynb-ts8N92snfiJ6Kk0r3eFNLoyB8lXH9ze5k70VDA2VVPKFI8j6geqRyXJ3X3_eqJQ53eqoLZmeDwJ9kPayctxod5YutHeVI0ovu9Th4PQD8dYalDo-MDjIx6cqjCVHYo3UiUP22bWZq8Fit6O_uMlDnvVAFHH4xYCcdU6OvXdK_R0gUPC3xS9-867q8j0Qtkq-pUZh5sAJkCHDLrjiySc7ukxOMmG5VAO7ZHCg2WvfLihFHNZdoFaMnTBuFlV5GGA..%26bt%3Ddev%26mac%3DAQEAEAABABQzJDp7167VzPGDxcuCL1N8WT1w0aDYwes.; SecureNetflixId=v%3D2%26mac%3DAQEAEQABABQwIrfUUjxszh8EGaf-wVdoxlX-kN8kZpc.%26dt%3D1562444652927; flwssn=c8795e5e-6a2e-41d6-b285-d9417c2ad05b',
+          'User-Agent': 'PostmanRuntime/7.15.0',
+          'Cache-Control': 'no-cache',
+          'Accept-Encoding': 'gzip, deflate',
+          'Connection': 'keep-alive'
+        }
+      }).then(response => {
+        const $ = cheerio.load(response.data.split('&quot;').join('"'));
+        let $card = $('#title-card-0-0');
+        let $link = $card.find($('div.ptrack-content > a'));
+        let $title = $link.find($('div > div'));
+        console.log($title.text());
+        if (res.title.split(' 시즌')[0]) {
+
+        }
+      });*/
     });
 
 
