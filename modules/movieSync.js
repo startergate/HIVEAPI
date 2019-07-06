@@ -19,7 +19,6 @@ class HIVEMovieUpdater {
       db.findMovie(watchaID[j], (err, res) => {
         if (err) throw err;
         if (res) {
-          this.update(watchaID);
           this.update(watchaID[j]);
           return;
         }
