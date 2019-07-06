@@ -131,6 +131,7 @@ class HIVEMovieUpdater {
     const instanceImdb = createInstance("https://www.imdb.com/");
     //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
     const instanceNaver = createInstance("https://movie.naver.com/movie");
+    const instanceNetflix = createInstance("https://www.netflix.com/");
 
     db.findMovie(watchaID, (err, res) => {
       if (res.hasOwnProperty('iid')) {
@@ -168,7 +169,7 @@ class HIVEMovieUpdater {
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $nScore = $('#content > div > div.mv_info_area > div.mv_info > div.main_score > div.score.score_left > div.star_score');
-          let text = $nScore.text().replace(/(^\s*)|(\s*$)/gi, "")
+          let text = $nScore.text().replace(/(^\s*)|(\s*$)/gi, "");
           if (text) {
             db.updateMovie(watchaID, {
               'critics.naver': $nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1
@@ -176,6 +177,11 @@ class HIVEMovieUpdater {
           }
         });
       }
+
+      instanceNetflix.get('/search', {
+        params: {
+          q: urlencode(res.title)
+        },
     });
 
 
