@@ -120,7 +120,7 @@ class HIVEMovieUpdater {
               });
             });
           });
-        });
+        }).catch(err => {});
       });
     }
   }
@@ -134,22 +134,28 @@ class HIVEMovieUpdater {
 
     db.findMovie(watchaID, (err, res) => {
       if (res.hasOwnProperty('iid')) {
-        console.log(`/title/${res.iid}/`);
         instanceImdb.get(`/title/${res.iid}/`, {
           timeout: 3000
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $iScore = $('[itemprop=ratingValue]');
-          console.log($iScore.text());
           db.updateMovie(watchaID, {
-            'critics.imdb': $iScore.text()
-          })
+            'critics.imdb': $iScore.text() * 1
+          });
         }).catch(err => {
           return;
         });
       }
-      if (res.nid) {
-
+      if (res.hasOwnProperty('wid')) {
+        instanceWatcha.get(`/contents/${res.wid}`, {
+          timeout: 3000
+        }).then(response => {
+          const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          let $nScore = $('.e1sxs7wr16');
+          db.updateMovie(watchaID, {
+            'critics.watcha': $nScore.text().split('평점 ★').join('').split(' (')[0] * 2
+          });
+        }).catch(err => {});
       }
     });
 
