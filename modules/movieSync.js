@@ -142,20 +142,33 @@ class HIVEMovieUpdater {
           db.updateMovie(watchaID, {
             'critics.imdb': $iScore.text() * 1
           });
-        }).catch(err => {
-          return;
-        });
+        }).catch(err => {});
       }
       if (res.hasOwnProperty('wid')) {
         instanceWatcha.get(`/contents/${res.wid}`, {
           timeout: 3000
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
-          let $nScore = $('.e1sxs7wr16');
+          let $wScore = $('.e1sxs7wr16');
           db.updateMovie(watchaID, {
-            'critics.watcha': $nScore.text().split('평점 ★').join('').split(' (')[0] * 2
+            'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 2
           });
         }).catch(err => {});
+      }
+
+      if (res.hasOwnProperty('nid')) {
+        instanceNaver.get(`/bi/mi/basic.nhn?code=${res.nid}`, {
+          timeout: 3000
+        }).then(response => {
+          const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          let $nScore = $('#content > div > div.mv_info_area > div.mv_info > div.main_score > div.score.score_left > div.star_score');
+          let text = $nScore.text().replace(/(^\s*)|(\s*$)/gi, "")
+          if (text) {
+            db.updateMovie(watchaID, {
+              'critics.naver': $nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1
+            });
+          }
+        });
       }
     });
 
