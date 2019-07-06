@@ -144,17 +144,23 @@ class HIVEMovieUpdater {
           });
         }).catch(err => {});
       }
-      if (res.hasOwnProperty('wid')) {
-        instanceWatcha.get(`/contents/${res.wid}`, {
-          timeout: 3000
-        }).then(response => {
-          const $ = cheerio.load(response.data.split('&quot;').join('"'));
-          let $wScore = $('.e1sxs7wr16');
-          db.updateMovie(watchaID, {
-            'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 2
-          });
-        }).catch(err => {});
-      }
+
+      instanceWatcha.get(`/contents/${res.wid}`, {
+        timeout: 3000
+      }).then(response => {
+        const $ = cheerio.load(response.data.split('&quot;').join('"'));
+        let $wScore = $('.e1sxs7wr16');
+        let $wPlay = $('.css-2hlxoa-Self.eq7vxcy0');
+        let $wPlayTitle = $wPlay.find($('.css-13iaeui-Title'));
+        let wPlayExist = false;
+        if ($wPlayTitle.text() === '왓챠플레이') {
+          wPlayExist = true;
+        }
+        db.updateMovie(watchaID, {
+          'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 2,
+          'vod.watcha': wPlayExist
+        });
+      }).catch(err => {});
 
       if (res.hasOwnProperty('nid')) {
         instanceNaver.get(`/bi/mi/basic.nhn?code=${res.nid}`, {
