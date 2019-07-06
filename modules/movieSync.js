@@ -20,6 +20,7 @@ class HIVEMovieUpdater {
         if (err) throw err;
         if (res) {
           this.update(watchaID);
+          this.update(watchaID[j]);
           return;
         }
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
@@ -116,7 +117,7 @@ class HIVEMovieUpdater {
                 });
               });*/
               Promise.all(promises).then(_ => {
-                this.update(watchaID);
+                this.update(watchaID[j]);
               });
             });
           });
@@ -132,31 +133,32 @@ class HIVEMovieUpdater {
     //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
     const instanceNaver = createInstance("https://movie.naver.com/movie");
 
-    for (var i in watchaID) {
-      let j = i;
-      db.findMovie(watchaID[j], (err, res) => {
-        if (res.iid) {
-          instanceImdb.get(`/title/${res.iid}/`, {
-            timeout: 3000
-          }).then(response => {
-            const $ = cheerio.load(response.data.split('&quot;').join('"'));
-            let $iScore = $('[itemprop=ratingValue]');
-            db.updateMovie(watchaID[j], {
-              'critics.imdb': $iScore.text()
-            })
-          });
-        }
-        if (res.nid) {
+    db.findMovie(watchaID, (err, res) => {
+      if (res.hasOwnProperty('iid')) {
+        console.log(`/title/${res.iid}/`);
+        instanceImdb.get(`/title/${res.iid}/`, {
+          timeout: 3000
+        }).then(response => {
+          const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          let $iScore = $('[itemprop=ratingValue]');
+          console.log($iScore.text());
+          db.updateMovie(watchaID, {
+            'critics.imdb': $iScore.text()
+          })
+        }).catch(err => {
+          return;
+        });
+      }
+      if (res.nid) {
 
-        }
-      });
-    }
+      }
+    });
 
 
     // 넷플릭스, 왓챠, 아마존 판매 조회
 
     if (true) {
-      this.oldReInit();
+      this.oldReInit(watchaID);
     }
   }
 
