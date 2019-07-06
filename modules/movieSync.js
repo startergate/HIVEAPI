@@ -200,17 +200,21 @@ class HIVEMovieUpdater {
 
         }
       });*/
+
+      res.lastUpdate.setUTCMonth(res.lastUpdate.getUTCMonth() + 1);
+      if (new Date() > res.lastUpdate) {
+        this.oldReInit(watchaID);
+      }
     });
 
 
     // 넷플릭스, 왓챠, 아마존 판매 조회
 
-    if (true) {
-      this.oldReInit(watchaID);
-    }
   }
 
   oldReInit(watchaID) {
+    const instanceImdb = createInstance("https://www.imdb.com/");
+    const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
     // imdb 이미지
 
     // related 영화 조회
