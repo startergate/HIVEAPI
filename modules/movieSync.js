@@ -146,8 +146,13 @@ class HIVEMovieUpdater {
             })
           });
         }
+        if (res.nid) {
+
+        }
       });
     }
+
+
     // 넷플릭스, 왓챠, 아마존 판매 조회
 
     if (true) {
@@ -159,6 +164,12 @@ class HIVEMovieUpdater {
     // imdb 이미지
 
     // related 영화 조회
+  }
+
+  getMovie(watchaID, callback) {
+    db.findMovie(watchaID, (err, res) => {
+      callback(res);
+    });
   }
 }
 
