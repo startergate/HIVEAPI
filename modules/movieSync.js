@@ -175,10 +175,11 @@ class HIVEMovieUpdater {
         });
       }).catch(err => {
         console.log('watcha critic');
+      });
 
       if (res.hasOwnProperty('nid')) {
         instanceNaver.get(`/bi/mi/basic.nhn?code=${res.nid}`, {
-          timeout: 3000
+          timeout: 10000
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $nScore = $('#content > div > div.mv_info_area > div.mv_info > div.main_score > div.score.score_left > div.star_score');
