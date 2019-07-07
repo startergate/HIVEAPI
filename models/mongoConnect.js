@@ -36,3 +36,11 @@ exports.updateMovie = (watchaid, docs, callback) => {
     $set: docs
   }, callback);
 };
+
+exports.pushMovie = (watchaid, docs, callback) => {
+  db.movie.updateOne({
+    wid: watchaid
+  }, {
+    $push: docs
+  }, callback);
+};
