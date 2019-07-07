@@ -87,21 +87,22 @@ class HIVEMovieUpdater {
                     }
                   });
                 });
-              })); // 네이버 영화 ID 처리
+              }).catch(err => {})); // 네이버 영화 ID 처리
 
               let enMovieSearchQuery = urlencode(`${title} (${res.released})`);
               promises.push(instanceImdb.get('/find', {
                 params: {
-                  q: enMovieSearchQuery.split('%20').join('+')
+                  q: enMovieSearchQuery.split('%3A').join(':'),
+                  s: 'tt'
                 }
               }).then(response => {
                 const $ = cheerio.load(response.data.split('&quot;').join('"'));
-                let $table = $("table.findList");
+                let $table = $("#main > div > div:nth-child(3) > table");
                 let target = $table.find('tr > td.result_text').first().find('a');
                 db.updateMovie(watchaID[j], {
                   iid: target.attr('href').split('/')[2]
                 });
-              }));
+              }).catch(err => {}));
 
               /*instanceRotten.get('/search/', {
                 params: {
@@ -175,7 +176,7 @@ class HIVEMovieUpdater {
               'critics.naver': $nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1
             });
           }
-        });
+        }).catch(err => {});
       }
 
       /*instanceNetflix.get('/search', {
@@ -195,7 +196,6 @@ class HIVEMovieUpdater {
         let $card = $('#title-card-0-0');
         let $link = $card.find($('div.ptrack-content > a'));
         let $title = $link.find($('div > div'));
-        console.log($title.text());
         if (res.title.split(' 시즌')[0]) {
 
         }
