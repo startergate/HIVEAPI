@@ -3,6 +3,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const urlencode = require('urlencode');
+const fs = require('fs');
 const db = require('../models/mongoConnect');
 const createInstance = require('../models/axiosRequest');
 
@@ -92,13 +93,20 @@ class HIVEMovieUpdater {
               let enMovieSearchQuery = urlencode(`${title} (${res.released})`);
               promises.push(instanceImdb.get('/find', {
                 params: {
-                  q: enMovieSearchQuery.split('%3A').join(':'),
+                  q: enMovieSearchQuery.split('%20').join(' ').split('%3A').join(':'),
                   s: 'tt'
                 }
               }).then(response => {
+                console.log(response.data);
+                fs.writeFile('./test.html', response.data, (err) => {});
                 const $ = cheerio.load(response.data.split('&quot;').join('"'));
-                let $table = $("#main > div > div:nth-child(3) > table");
-                let target = $table.find('tr > td.result_text').first().find('a');
+                let $table = $(".findList");
+                console.log($table.length);
+                $table.each(function(index, el) {
+                  console.log($(this).find($('td.result_text')).find('a').text());
+                });
+                //console.log($table.find($('tr.findResult')).first().html());
+                let target = $table.find($('tr.findResult')).first().find($('td.result_text')).find('a');
                 db.updateMovie(watchaID[j], {
                   iid: target.attr('href').split('/')[2]
                 });
@@ -120,7 +128,7 @@ class HIVEMovieUpdater {
                 this.update(watchaID[j]);
               });
             });
-          });
+          }).catch(err => {});
         }).catch(err => {});
       });
     }
