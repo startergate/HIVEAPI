@@ -188,7 +188,9 @@ class HIVEMovieUpdater {
               'critics.naver': $nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1
             });
           }
-        }).catch(err => {});
+        }).catch(err => {
+          console.log('naver critic');
+        });
       }
 
       /*instanceNetflix.get('/search', {
@@ -227,6 +229,44 @@ class HIVEMovieUpdater {
   oldReInit(watchaID) {
     const instanceImdb = createInstance("https://www.imdb.com/");
     const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
+
+    db.findMovie(watchaID, (err, res) => {
+      if (res.hasOwnProperty('iid')) {
+        instanceImdb.get(`/title/${res.iid}/`, {
+          timeout: 10000
+        }).then(response => {
+          const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          const $poster = $("#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.poster > a > img");
+        }).catch(err => {
+          console.log('imdb image');
+          console.log(err);
+        });
+        instanceImdb.get(`/title/${res.iid}/mediaindex`, {
+          timeout: 10000
+        }).then(response => {
+          const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          const $images = $('#media_index_thumbnail_grid > a');
+
+          $images.each(function(index, el) {
+            instanceImdb.get($(this).attr('href'), {
+              timeout: 10000
+            }).then(response => {
+              const $ = cheerio.load(response.data.split('&quot;').join('"'));
+              let $img = $('#photo-container > div > div:nth-child(2) > div > div.pswp__scroll-wrap > div.pswp__container > div:nth-child(2) > div > img:nth-child(2)');
+              console.log($img);
+              db.pushMovie(watchaID, {
+                'images': $img.attr('src')
+              });
+            }).catch(err => {
+              console.log('imdb image deep');
+              console.log(err);
+            });
+          });
+        }).catch(err => {
+          console.log('imdb image index');
+        });
+      }
+    });
     // imdb 이미지
 
     // related 영화 조회
