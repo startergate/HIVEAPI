@@ -3,7 +3,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const urlencode = require('urlencode');
-const fs = require('fs');
 const db = require('../models/mongoConnect');
 const createInstance = require('../models/axiosRequest');
 
@@ -88,7 +87,9 @@ class HIVEMovieUpdater {
                     }
                   });
                 });
-              }).catch(err => {})); // 네이버 영화 ID 처리
+              }).catch(err => {
+                console.log('naverid' + title);
+              })); // 네이버 영화 ID 처리
 
               let enMovieSearchQuery = urlencode(`${title} (${res.released})`);
               promises.push(instanceImdb.get('/find', {
@@ -97,20 +98,15 @@ class HIVEMovieUpdater {
                   s: 'tt'
                 }
               }).then(response => {
-                console.log(response.data);
-                fs.writeFile('./test.html', response.data, (err) => {});
                 const $ = cheerio.load(response.data.split('&quot;').join('"'));
                 let $table = $(".findList");
-                console.log($table.length);
-                $table.each(function(index, el) {
-                  console.log($(this).find($('td.result_text')).find('a').text());
-                });
-                //console.log($table.find($('tr.findResult')).first().html());
                 let target = $table.find($('tr.findResult')).first().find($('td.result_text')).find('a');
                 db.updateMovie(watchaID[j], {
                   iid: target.attr('href').split('/')[2]
                 });
-              }).catch(err => {}));
+              }).catch(err => {
+                console.log('imdbid' + title);
+              }));
 
               /*instanceRotten.get('/search/', {
                 params: {
@@ -128,8 +124,12 @@ class HIVEMovieUpdater {
                 this.update(watchaID[j]);
               });
             });
-          }).catch(err => {});
-        }).catch(err => {});
+          }).catch(err => {
+            console.log('watchainfoS');
+          });
+        }).catch(err => {
+          console.log('watchainfo');
+        });
       });
     }
   }
@@ -145,18 +145,21 @@ class HIVEMovieUpdater {
     db.findMovie(watchaID, (err, res) => {
       if (res.hasOwnProperty('iid')) {
         instanceImdb.get(`/title/${res.iid}/`, {
-          timeout: 3000
+          timeout: 10000
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $iScore = $('[itemprop=ratingValue]');
           db.updateMovie(watchaID, {
             'critics.imdb': $iScore.text() * 1
           });
-        }).catch(err => {});
+        }).catch(err => {
+          console.log('IMDb Critic');
+          console.log(err);
+        });
       }
 
       instanceWatcha.get(`/contents/${res.wid}`, {
-        timeout: 3000
+        timeout: 10000
       }).then(response => {
         const $ = cheerio.load(response.data.split('&quot;').join('"'));
         let $wScore = $('.e1sxs7wr16');
@@ -170,7 +173,8 @@ class HIVEMovieUpdater {
           'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 2,
           'vod.watcha': wPlayExist
         });
-      }).catch(err => {});
+      }).catch(err => {
+        console.log('watcha critic');
 
       if (res.hasOwnProperty('nid')) {
         instanceNaver.get(`/bi/mi/basic.nhn?code=${res.nid}`, {
