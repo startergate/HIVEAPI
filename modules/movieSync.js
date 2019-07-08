@@ -3,6 +3,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const urlencode = require('urlencode');
+const fs = require('fs');
 const db = require('../models/mongoConnect');
 const createInstance = require('../models/axiosRequest');
 
@@ -150,10 +151,16 @@ class HIVEMovieUpdater {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $iScore = $('[itemprop=ratingValue]');
           let $mScore = $('.metacriticScore');
-          db.updateMovie(watchaID, {
-            'critics.imdb': $iScore.text() * 1,
-            'critics.metascore': $mScore.text() * 1
-          });
+          if ($mScore) {
+            db.updateMovie(watchaID, {
+              'critics.imdb': $iScore.text() * 1,
+              'critics.metascore': $mScore.text() * 1
+            });
+          } else {
+            db.updateMovie(watchaID, {
+              'critics.imdb': $iScore.text() * 1
+            });
+          }
         }).catch(err => {
           console.log('IMDb Critic');
           console.log(err);
@@ -232,6 +239,7 @@ class HIVEMovieUpdater {
   oldReInit(watchaID) {
     const instanceImdb = createInstance("https://www.imdb.com/");
     const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
+    const instanceNaver = createInstance("https://movie.naver.com/movie");
 
     db.findMovie(watchaID, (err, res) => {
       if (res.hasOwnProperty('iid')) {
@@ -244,35 +252,45 @@ class HIVEMovieUpdater {
           console.log('imdb image');
           console.log(err);
         });
-        instanceImdb.get(`/title/${res.iid}/mediaindex`, {
+      }
+
+      if (res.hasOwnProperty('nid')) {
+        db.updateMovie(watchaID, {
+          'images': []
+        });
+        instanceNaver.get(`bi/mi/photoView.nhn?code=${res.nid}`, {
           timeout: 10000
         }).then(response => {
+          fs.writeFileSync('test.html', response.data.split('&quot;').join('"'))
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
-          const $images = $('#media_index_thumbnail_grid > a');
-
+          const $images = $('.rolling_list > ul > li._list');
           $images.each(function(index, el) {
-            instanceImdb.get($(this).attr('href'), {
-              timeout: 10000
+            let tempjson = JSON.parse($(this).attr('data-json'));
+            instanceNaver.get(`bi/mi/photoViewPopup.nhn?imageNid=${tempjson.imageNid}`, {
+              timeout: 30000
             }).then(response => {
               const $ = cheerio.load(response.data.split('&quot;').join('"'));
-              let $img = $('#photo-container > div > div:nth-child(2) > div > div.pswp__scroll-wrap > div.pswp__container > div:nth-child(2) > div > img:nth-child(2)');
-              console.log($img);
+              let $img = $('#targetImage');
               db.pushMovie(watchaID, {
                 'images': $img.attr('src')
               });
             }).catch(err => {
-              console.log('imdb image deep');
-              console.log(err);
+              console.log('naver image deep');
+              //console.log(err);
             });
           });
         }).catch(err => {
-          console.log('imdb image index');
+          console.log('naver image index');
         });
       }
     });
     // imdb 이미지
 
     // related 영화 조회
+
+    db.updateMovie(watchaID, {
+      'lastUpdate': new Date()
+    });
   }
 
   getMovie(watchaID, callback) {
