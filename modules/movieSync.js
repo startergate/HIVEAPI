@@ -149,8 +149,10 @@ class HIVEMovieUpdater {
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $iScore = $('[itemprop=ratingValue]');
+          let $mScore = $('.metacriticScore');
           db.updateMovie(watchaID, {
-            'critics.imdb': $iScore.text() * 1
+            'critics.imdb': $iScore.text() * 1,
+            'critics.metascore': $mScore.text() * 1
           });
         }).catch(err => {
           console.log('IMDb Critic');
@@ -170,7 +172,7 @@ class HIVEMovieUpdater {
           wPlayExist = true;
         }
         db.updateMovie(watchaID, {
-          'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 2,
+          'critics.watcha': $wScore.text().split('평점 ★').join('').split(' (')[0] * 1,
           'vod.watcha': wPlayExist
         });
       }).catch(err => {
