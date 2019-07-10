@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "@startergate/sidjs": "0.0.3",
+    "@startergate/sidjs": "0.0.4",
     "assert": "^2.0.0",
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.3",

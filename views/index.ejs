@@ -17,14 +17,7 @@
       <div class="search">
         <input type="text" class="searchTerm" placeholder="To Infinity And Beyond!">
       </div>
-      <ul class='searchTable'>
-        <a href="">
-          <li class='searchRow'>
-            <span class="searchTitle">어벤져스: 엔드게임</span>
-            <span class="searchType">영화</span>
-          </li>
-        </a>
-      </ul>
+      <ul class='searchTable'></ul>
   </div>
 
   <div class='logo'>
@@ -42,20 +35,18 @@
         url: '/api/v1/search/' + searchVal,
         type: 'GET',
         dataType: 'json',
-        success: function(data) {
-          for (var res in data.result) {
-            $('.searchTable').append("<a href=''><li class='searchRow'><span class='searchTitle'>" + res.title + "</span><span class='searchType'>" + res.type + "</span></li></a>");
-          }
-        }
       })
-      .done(function() {
-        console.log("success");
+      .done(function(data) {
+        for (var res in data.result) {
+          $('.searchTable').append("<a class='searchA' href=''><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
+        }
+        console.log("Search Success");
       })
       .fail(function() {
-        console.log("error");
+        console.log("Search Error");
       })
       .always(function() {
-        console.log("complete");
+        console.log("Search Finish");
       });
 
     });

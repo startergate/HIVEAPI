@@ -6,7 +6,9 @@ body{
   top: 0px;
   margin: 0;
   font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
 }
+
 a {
   text-decoration: none;
   color:inherit;
@@ -62,26 +64,23 @@ a {
   width: 99%;
   background-color: rgba(255, 255, 255);
   padding: 10px 15px;
-  height: 50px;
+  height: 45px;
   margin: 0 auto;
   box-sizing: border-box;
   animation-duration: 1s;
   animation-name: searchRowSummon;
+  border-top: 2px solid gainsboro;
 }
 
-.searchRow:first-child {
+.searchA:first-child > .searchRow {
   border: 0 !important;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-.searchRow:last-child {
+.searchA:last-child > .searchRow {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-}
-
-.searchRow:nth-child(2) {
-  border-top: 2px solid gainsboro;
 }
 
 @keyframes searchRowSummon {
