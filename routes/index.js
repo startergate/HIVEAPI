@@ -13,9 +13,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/movie/:wid', (req, res, next) => {
-  movie.getMovie(req.params.wid, (res) => {
+  movie.getMovie(req.params.wid, (result) => {
     res.render('movie');
-  })
+  });
 });
 
 module.exports = router;

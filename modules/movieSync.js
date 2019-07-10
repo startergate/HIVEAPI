@@ -262,7 +262,7 @@ class HIVEMovieUpdater {
         }).then(response => {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           db.updateMovie(watchaID, {
-            poster: $('.poster > a > img').attr('src')
+            poster: $('.poster > a > img').attr('src').split('?')[0]
           });
           const $images = $('.rolling_list > ul > li._list');
           $images.each(function(index, el) {
@@ -295,8 +295,8 @@ class HIVEMovieUpdater {
   }
 
   getMovie(watchaID, callback) {
-    db.findMovie(watchaID, (err, res) => {
-      callback(res);
+    db.findMovie(watchaID, (err, result) => {
+      callback(result);
     });
   }
 

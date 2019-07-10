@@ -3,9 +3,12 @@
 body{
     background-color: #fff;
     font-family: 'Open Sans', sans-serif;
-    display: inline;
     overflow-x: hidden;
     overflow-y: auto;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
 }
 
 * {box-sizing:border-box}
@@ -72,12 +75,12 @@ body{
 }
 
 @-webkit-keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .4}
   to {opacity: 1}
 }
 
 @keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .4}
   to {opacity: 1}
 }
 
@@ -97,45 +100,25 @@ body{
   margin-bottom: 3rem;
 }
 
-/*Resize the wrap to see the search bar change!*/
-.background-image {
-  width: 105%;
-  height: 105%;
-  position: absolute;
-  left: -2%;
-  right: 0;
-  top: -2%;;
-  z-index: 1;
-  display: flexbox;
-  background-image: url('http://moviemarker.co.uk/wp-content/uploads/Bitter-Harvest-2017-Movie-Stills-4K.jpg');
-  background-size: cover;
-  -webkit-filter: blur(10px);
-  -moz-filter: blur(10px);
-  -o-filter: blur(10px);
-  -ms-filter: blur(10px);
-  filter: blur(10px);
-  opacity: 0.5;
-  
-}
-::-webkit-scrollbar {
-  display:none;
-  }
-
 .box {
+  position:relative;
+  transform: translateY(-50%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50vh;
+  box-sizing: border-box;
+  width: 50%;
   background-color: rgba(255, 255, 255, 0.9);
-  position: absolute;
-  left: 0;
-  right: 0;
   z-index: 9999;
-  margin-top: 60px;
-  margin-left: 10%;
-  margin-right: 10%;
   padding: 1rem;
   padding-left: 5%;
   padding-right: 5%;
   padding-top: 3rem;
 }
 
+.poster {
+  width: 140px
+}
 
 .poster img{
   width: 100%;
@@ -144,11 +127,9 @@ body{
   margin-right: 1rem;
 }
 
-.title{ 
-  padding-left: 1rem;
-  padding-bottom: 1rem;
+.title{
   display: flex;
-  }
+}
 
 .movieDesc {
   display: inline;
@@ -157,7 +138,7 @@ body{
   position: relative;
 }
 
-#movie{
+.movie{
   font-weight: bold;
   font-size: 28px;
   letter-spacing: 4px;
@@ -169,25 +150,98 @@ body{
   text-align: left;
 }
 
+.image {
+  overflow-x: scroll;
+}
+
+.image img {
+  height : 200px;
+  margin-right: 5px
+}
+
+.image > div {
+  display: flex;
+}
+
 /*
  * General styles.
  * Not necessary for the component to work
 */
 .rating{
-  display: block;
-  margin-bottom: 4px;
+  display: flex;
+  margin-right: 4px;
+  border-left: 5px;
 }
 
 .rating div{
   font-size: 13px;
-  margin-right: 6rem;
   margin-bottom: 1em;
   display: inline-block;
 }
 
 .rating img{
-  width: 2em;
+  width: 40px;
+  height: 40px;
   vertical-align: middle;
+  margin: 5px;
 }
 
+.ratingBox {
+  display: flex !important;
+  margin-right: 10px;
+  border: 1px solid gainsboro;
+  border-radius: 4px;
+}
 
+.naverMovie {
+  background-color: #01c73c;
+  color: white;
+}
+.watcha {
+  background-color: white;
+}
+
+.IMDb {
+  background-color: #f5c518;
+}
+
+.metacritic {
+  background-color: white;
+}
+
+.criticPoint {
+  padding: 8px 0px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+.movieTitleEn {
+  color: grey;
+  font-size: 15px;
+}
+
+.titles {
+  margin-bottom: 10px;
+}
+
+.vod {
+  background-color: black;
+  width: 190px;
+}
+
+.vod img {
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+}
+
+.wONWP {
+    padding: 2px 0px;
+    height: 50px;
+    vertical-align: middle;
+    font-size: 20px;
+    color: white;
+}

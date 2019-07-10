@@ -43,7 +43,7 @@
       })
       .done(function(data) {
         for (var res in data.result) {
-          $('.searchTable').append("<a class='searchA' href='/movie/" + data.result[res].wid + "'><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
+          $('.searchTable').append("<a class='searchA' href='/movie/" + res + "'><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
         }
         console.log("Search Success");
       })
