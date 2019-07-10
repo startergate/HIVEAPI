@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>HIVE</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/bgStyle.css">
 </head>
-<body class='bg bge bgi'>
+<body class='bg bge bgImg'>
   <header class='fixed'>
       <a href='http://sid.donote.co:3000/user/login?' type="button" name="loginButton" class="login">로그인</a>
   </header>
@@ -16,17 +16,49 @@
   <div class="covra warp">
       <div class="search">
         <input type="text" class="searchTerm" placeholder="To Infinity And Beyond!">
-        <button type="submit" class="searchButton" onclick="location.href='./tempMovie.html'"></button>
       </div>
+      <ul class='searchTable'>
+        <a href="">
+          <li class='searchRow'>
+            <span class="searchTitle">어벤져스: 엔드게임</span>
+            <span class="searchType">영화</span>
+          </li>
+        </a>
+      </ul>
+  </div>
+
+  <div class='logo'>
+    <img src="/images/HIVE white.png" alt="HIVE">
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="/javascripts/sid.js" charset="utf-8"></script>
+  <script src="/javascripts/sidinit.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var sid = new SID('HIVE');
-    if (!localStorage.sid_clientid) {
-      sid.createClientID(navigator.userAgent);
-    }
-    $('.login').attr('href', 'http://sid.donote.co:3000/user/login?clientid='+localStorage.sid_clientid+'&headTo=http://localhost:3000/user/auth')
+    $('.searchTerm').change(function(event) {
+      $('.searchTable').empty();
+      var searchVal = $('.searchTerm').val();
+      if (searchVal == '') return;
+      $.ajax({
+        url: '/api/v1/search/' + searchVal,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          for (var res in data.result) {
+            $('.searchTable').append("<a href=''><li class='searchRow'><span class='searchTitle'>" + res.title + "</span><span class='searchType'>" + res.type + "</span></li></a>");
+          }
+        }
+      })
+      .done(function() {
+        console.log("success");
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
+    });
   </script>
 </body>
 </html>

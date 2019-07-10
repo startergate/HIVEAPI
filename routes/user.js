@@ -20,7 +20,7 @@ router.get('/login', (req, res, next) => {
     req.session.nickname = result.nickname;
     req.session.expire = result.expire;
     res.redirect('/');
-  })
+  });
   res.redirect('/');
 });
 
