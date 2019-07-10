@@ -15,6 +15,7 @@ a {
 }
 
 .login{
+  position: fixed;
     color: #fff;
     padding: 0;
     border: none;
@@ -96,6 +97,9 @@ a {
 
 .searchTitle {
   float: left;
+  max-width: 50%;
+  max-height: 24px;
+  overflow:hidden;
 }
 
 .searchType {
@@ -122,6 +126,14 @@ a {
   width: 40%
 }
 
+.covra2{
+  position:relative;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  width: 40%
+}
+
 .fixed {
   position: fixed;
 }
@@ -135,4 +147,28 @@ a {
 
 .logo > img {
   height: 30px;
+}
+
+.profileImg {
+  width: 50px;
+  border-radius: 25px;
+  border: 1px solid white;
+  box-sizing: border-box;
+}
+
+.liked {
+  margin-top: 20vh;
+  height: 60vh;
+  overflow-x:visible;
+  overflow-y: scroll;
+}
+
+.likedTable {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  float: left;
+  display:block;
+  list-style: none;
+  box-sizing: border-box;
 }

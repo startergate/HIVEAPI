@@ -44,3 +44,23 @@ exports.pushMovie = (watchaid, docs, callback) => {
     $push: docs
   }, callback);
 };
+
+exports.findUser = (pid, callback) => {
+  db.user.findOne({
+    pid: pid
+  }, callback);
+};
+
+exports.insertUser = (docs, callback) => {
+  db.user.insertOne(docs, callback);
+};
+
+exports.addLike = (sessid, docs, callback) => {
+  db.user.updateOne({
+    lastSession: sessid
+  }, {
+    $push: {
+      'liked': docs
+    }
+  }, callback);
+};

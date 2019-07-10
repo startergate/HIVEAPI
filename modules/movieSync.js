@@ -3,7 +3,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const urlencode = require('urlencode');
-const fs = require('fs');
 const db = require('../models/mongoConnect');
 const createInstance = require('../models/axiosRequest');
 
@@ -261,8 +260,10 @@ class HIVEMovieUpdater {
         instanceNaver.get(`bi/mi/photoView.nhn?code=${res.nid}`, {
           timeout: 10000
         }).then(response => {
-          fs.writeFileSync('test.html', response.data.split('&quot;').join('"'))
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
+          db.updateMovie(watchaID, {
+            poster: $('.poster > a > img').attr('src')
+          });
           const $images = $('.rolling_list > ul > li._list');
           $images.each(function(index, el) {
             let tempjson = JSON.parse($(this).attr('data-json'));
@@ -296,6 +297,14 @@ class HIVEMovieUpdater {
   getMovie(watchaID, callback) {
     db.findMovie(watchaID, (err, res) => {
       callback(res);
+    });
+  }
+
+  getLiked(pid, callback) {
+    console.log(pid);
+    db.findUser(pid, (err, res) => {
+      console.log(res);
+      callback(res.liked);
     });
   }
 }

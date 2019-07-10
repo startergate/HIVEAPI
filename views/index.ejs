@@ -10,7 +10,11 @@
 </head>
 <body class='bg bge bgImg'>
   <header class='fixed'>
-      <a href='http://sid.donote.co:3000/user/login?' type="button" name="loginButton" class="login">로그인</a>
+      <% if (!session) { %>
+      <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
+      <% } else { %>
+      <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+      <% } %>
   </header>
 
   <div class="covra warp">
@@ -27,6 +31,7 @@
   <script src="/javascripts/sid.js" charset="utf-8"></script>
   <script src="/javascripts/sidinit.js" charset="utf-8"></script>
   <script type="text/javascript">
+    var sid = new SID('HIVE');
     $('.searchTerm').change(function(event) {
       $('.searchTable').empty();
       var searchVal = $('.searchTerm').val();
@@ -38,7 +43,7 @@
       })
       .done(function(data) {
         for (var res in data.result) {
-          $('.searchTable').append("<a class='searchA' href=''><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
+          $('.searchTable').append("<a class='searchA' href='/movie/" + data.result[res].wid + "'><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
         }
         console.log("Search Success");
       })
@@ -48,7 +53,6 @@
       .always(function() {
         console.log("Search Finish");
       });
-
     });
   </script>
 </body>

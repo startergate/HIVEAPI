@@ -4,5 +4,5 @@ if (!localStorage.sid_clientid) {
 }
 if (localStorage.sid_clientid) {
   document.cookie = 'sid_clientid=' + sid.getClientID();
-  $('.login').attr('href', 'http://sid.donote.co:3000/user/login?clientid=' + localStorage.sid_clientid + '&headTo=http://localhost:3000/user/auth');
+  $('.realLogin').attr('href', 'http://sid.donote.co:3000/user/login?clientid=' + localStorage.sid_clientid + '&headTo=http://localhost:3000/user/auth');
 }

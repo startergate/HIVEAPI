@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HIVE</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/bgStyle.css">
+    <link rel="stylesheet" href="/stylesheets/scroll.css">
+</head>
+<body class='bg bge bgImg'>
+  <header class='fixed'>
+    <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+  </header>
+
+  <div class="covra2 warp liked">
+      <ul class="likedTable">
+        <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 인피니티 워</span><span class="searchType">영화</span></li></a>
+        <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 엔드 게임</span><span class="searchType">영화</span></li></a>
+        <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스</span><span class="searchType">영화</span></li></a>
+        
+        <% for (var i; i < 10; i++) { %>
+          <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 인피니티 워</span><span class="searchType">영화</span></li></a>
+        <% } %>
+      </ul>
+  </div>
+
+  <div class='logo'>
+    <img src="/images/HIVE white.png" alt="HIVE">
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/javascripts/sid.js" charset="utf-8"></script>
+  <script src="/javascripts/sidinit.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var liked = <%= liked %>;
+      var sid = new SID('HIVE');
+      var searchVal = $('.searchTerm').val();
+      if (searchVal == '') return;
+      $.ajax({
+        url: '/api/v1/search/' + searchVal,
+        type: 'GET',
+        dataType: 'json',
+      })
+      .done(function(data) {
+        for (var res in data.result) {
+          $('.searchTable').append("<a class='searchA' href=''><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
+        }
+        console.log("Search Success");
+      })
+      .fail(function() {
+        console.log("Search Error");
+      })
+      .always(function() {
+        console.log("Search Finish");
+      });
+    });
+
+  </script>
+</body>
+</html>

@@ -27,15 +27,9 @@ class SID {
 
   getProfile(clientid, sessid, callback) {
     $.ajax({
-      url: 'http://sid.donote.co:3000/api/v1/pfimg',
+      url: 'http://sid.donote.co:3000/api/v1/' + clientid + '/' + sessid + '/pfimg',
       type: 'GET',
       dataType: 'json',
-      data: {
-        'type': 'get',
-        'data': 'pfimg',
-        'clientid': clientid,
-        'sessid': sessid
-      },
       success: (data) => {
         callback(data.requested_data);
       }
