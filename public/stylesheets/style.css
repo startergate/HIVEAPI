@@ -1,8 +1,90 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+    background-image: url('https://images.unsplash.com/photo-1520901157462-0ea3fb2f9024?ixlib=rb-1.2.1&w=1000&q=80');
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-size: cover;
+    background-position-x: center;
+    background-repeat:no-repeat;
+    width: 100%;
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+.login{
+    color: #fff;
+    padding: 0;
+    border: none;
+    background: none;
+    font-weight: bold;
+    font-size: 10pt;
+    position: fixed;
+    right: 1%;
+    top: 2%;
+    text-decoration: none;
 }
 
-a {
-  color: #00B7FF;
+.search {
+  width: 40%;
+  position: relative;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20%;
+  margin-bottom: auto;
+}
+
+.searchTerm {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 5px;
+  padding-left: 15px;
+  height: 40px;
+  /* border-radius: 4px 0 0 4px; */
+  outline: none;
+  font-size: 20px;
+
+  border: none;
+  border-left-style: solid;
+  border-left-width: 5px;
+}
+
+.searchTerm:focus{
+  color: #000000;
+}
+
+.searchButton {
+  width: 57px;
+  height: 52px;
+  border: 1px solid #000000;
+  background: #000000;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 1px 1px 0;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.covra{
+  position:relative;
+  transform: translateY(-50%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50vh;
+  box-sizing: border-box;
+}
+
+.fixed {
+  position: fixed;
 }

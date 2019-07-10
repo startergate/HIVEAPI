@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/bgStyle.css">
+</head>
+<body class='bg bge bgi'>
+  <header class='fixed'>
+      <a href='http://sid.donote.co:3000/user/login?' type="button" name="loginButton" class="login">로그인</a>
+  </header>
+
+  <div class="covra warp">
+      <div class="search">
+        <input type="text" class="searchTerm" placeholder="To Infinity And Beyond!">
+        <button type="submit" class="searchButton" onclick="location.href='./tempMovie.html'"></button>
+      </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/javascripts/sid.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    var sid = new SID('HIVE');
+    if (!localStorage.sid_clientid) {
+      sid.createClientID(navigator.userAgent);
+    }
+    $('.login').attr('href', 'http://sid.donote.co:3000/user/login?clientid='+localStorage.sid_clientid+'&headTo=http://localhost:3000/user/auth')
+  </script>
+</body>
+</html>

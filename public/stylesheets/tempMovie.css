@@ -1,0 +1,193 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+    background-color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    display: inline;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 700px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 10px;
+  position: absolute;
+  top: 0;
+}
+
+.active{
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+
+.stroy{
+  letter-spacing:1px;
+  line-height:25px;
+  text-align: left;
+  padding: 2rem 4rem 4rem 4rem;
+}
+
+.img-circle{
+  border-radius: 50%;
+}
+
+.stroy p{
+  margin-bottom: 3rem;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.background-image {
+  width: 105%;
+  height: 105%;
+  position: absolute;
+  left: -2%;
+  right: 0;
+  top: -2%;;
+  z-index: 1;
+  display: flexbox;
+  background-image: url('http://moviemarker.co.uk/wp-content/uploads/Bitter-Harvest-2017-Movie-Stills-4K.jpg');
+  background-size: cover;
+  -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+  filter: blur(10px);
+  opacity: 0.5;
+  
+}
+::-webkit-scrollbar {
+  display:none;
+  }
+
+.box {
+  background-color: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  margin-top: 60px;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 1rem;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 3rem;
+}
+
+
+.poster img{
+  width: 100%;
+  max-width: 16em;
+  min-width: 8em;
+  margin-right: 1rem;
+}
+
+.title{ 
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  }
+
+.movieDesc {
+  display: inline;
+  vertical-align: top;
+  margin-left: 2rem;
+  position: relative;
+}
+
+#movie{
+  font-weight: bold;
+  font-size: 28px;
+  letter-spacing: 4px;
+  display: inline;
+  vertical-align: top;
+}
+
+.sub{
+  text-align: left;
+}
+
+/*
+ * General styles.
+ * Not necessary for the component to work
+*/
+.rating{
+  display: block;
+  margin-bottom: 4px;
+}
+
+.rating div{
+  font-size: 13px;
+  margin-right: 6rem;
+  margin-bottom: 1em;
+  display: inline-block;
+}
+
+.rating img{
+  width: 2em;
+  vertical-align: middle;
+}
+
+

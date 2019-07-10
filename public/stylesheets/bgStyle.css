@@ -1,0 +1,39 @@
+.bg {
+    background-repeat:no-repeat;
+    background-position-y: top;
+    min-width: 100%;
+    min-height: 100%;
+    width:100vw;
+    height:100vh;
+}
+.bge{
+    background-position-x: right;
+}
+.bgi{
+    background-position-x: center;
+}
+@media (min-width: 992px) {
+  .bgi{
+    min-height: 50px;
+  }
+}
+@media (max-width: 991.98px) {
+  .bgi{
+    min-height: 100px;
+  }
+}
+.bgImg{
+    background-image: url('https://source.unsplash.com/random/1280x720');
+    background-color: #3d414d;
+    background-size: cover;
+}
+
+.imgLocation{
+  position: fixed;
+  font-size: 10px;
+  background-color:rgba(255,255,255,0.5);
+  width:auto;
+  padding: 5px;
+  top: 10px;
+  left: 10px;
+}
