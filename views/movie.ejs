@@ -21,6 +21,9 @@
       <% } %>
     </header>
     <div class="box">
+      <% if (session) { %>
+      <span class='fixed likey emptyLikey' id='heart'></span>
+      <% } %>
       <div class="title">
         <div class="poster">
           <img id="poster" src="<%= docs.poster %>" alt="<%= docs.title %>">
