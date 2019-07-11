@@ -8,61 +8,81 @@
     <title>HIVE</title>
     <link rel="stylesheet" href="/stylesheets/tempMovie.css">
     <link rel="stylesheet" href="/stylesheets/bgStyle.css">
+    <link rel="stylesheet" href="/stylesheets/scroll.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body class='bg bge bgImg'>
+<body class='bg bge bgImg' <% if (locals.bgImg) { %>style='background-image: url(<%= bgImg %>)' <% } %>>
+    <header class='fixed'>
+      <% if (!session) { %>
+      <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
+      <% } else { %>
+      <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+      <% } %>
+    </header>
     <div class="box">
       <div class="title">
         <div class="poster">
-          <img id="poster" src="https://movie-phinf.pstatic.net/20190417_250/1555465284425i6WQE_JPEG/movie_image.jpg" alt="">
+          <img id="poster" src="<%= docs.poster %>" alt="<%= docs.title %>">
         </div>
         <div class="movieDesc">
           <div class='titles'>
-            <div class="movie">어벤져스: 엔드게임 (2019)</div>
-            <div class='movieTitleEn'>Avengers: Endgame (2019)</div>
+            <div class="movie"><%= docs.title %> (<%= docs.released %>)</div>
+            <div class='movieTitleEn'><%= docs.title_en %> (<%= docs.released %>)</div>
           </div>
 
             <div class="rating">
-              <a href="#">
+              <% if (docs.critics.naver) {%>
+              <a href="https://movie.naver.com/movie/bi/mi/basic.nhn?code=<%= docs.nid %>" target="_blank">
                 <div class="naverMovie ratingBox">
                   <img src="https://ssl.pstatic.net/static/m/movie/icons/naver_movie_favicon.ico" alt="">
-                  <span class='criticPoint'>7.0</span>
+                  <span class='criticPoint'><%= docs.critics.naver %></span>
                 </div>
               </a>
-              <a href="">
+              <% } %>
+              <% if (docs.critics.watcha) {%>
+              <a href="https://watcha.com/ko-KR/contents/<%= docs.wid %>" target="_blank">
                 <div class="watcha ratingBox">
                   <img class="img-circle" src="/images/watcha-favicon.png" alt="">
-                  <span class='criticPoint'>7.0</span>
+                  <span class='criticPoint'><%= docs.critics.watcha %></span>
                 </div>
               </a>
-              <a href="#">
+              <% } %>
+              <% if (docs.critics.imdb) {%>
+              <a href="https://www.imdb.com/title/<%= docs.iid %>" target="_blank">
                 <div class="IMDb ratingBox">
                   <img src="https://m.media-amazon.com/images/G/01/imdb/images/safari-favicon-517611381._CB483525257_.svg" alt="">
-                  <span class='criticPoint'>7.0</span>
+                  <span class='criticPoint'><%= docs.critics.imdb %></span>
                 </div>
               </a>
-              <a href="#">
+              <% } %>
+              <% if (docs.critics.metascore) {%>
+              <a href="https://www.imdb.com/title/<%= docs.iid %>/criticreviews" target="_blank">
                 <div class="metacritic ratingBox metaCriticYellow">
                   <img class="img-circle" src="https://pbs.twimg.com/profile_images/527528131171590144/EQXs3lpX_400x400.png" alt="">
-                  <span class='criticPoint'>70</span>
+                  <span class='criticPoint'><%= docs.critics.metascore %></span>
                 </div>
               </a>
+              <% } %>
             </div>
 
             <div class='flex'>
-              <a href="#">
+              <% if (docs.vod.watcha) {%>
+              <a href="https://play.watcha.net/contents/<%= docs.wid %>" target="_blank">
                 <div class="watchaPlay ratingBox vod">
                   <img class="img-circle" src="https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/fc/1d/dc/fc1ddc14-ebf5-6a8d-5479-1833d2879d6a/AppIcon-0-1x_U007emarketing-0-0-85-220-0-7.png/246x0w.jpg" alt="">
                   <span class='wONWP'>Watch on<br>Watcha Play</span>
                 </div>
               </a>
-              <a href="#">
+              <% } %>
+              <% if (docs.vod.amazon) {%>
+              <a href="<%= docs.vod.amazon %>" target="_blank">
                 <div class="amazonPrime ratingBox vod">
                   <img class="img-circle" src="https://pbs.twimg.com/profile_images/1146466747966296067/8jHpmYYk.png" alt="">
                   <span class='wONWP'>Watch Now With<br>Amazon Prime Video</span>
                 </div>
               </a>
+              <% } %>
             </div>
           </div>
         </div>
@@ -70,21 +90,46 @@
 
         <div class="image">
           <div>
-            <img src="https://movie-phinf.pstatic.net/20190423_104/1555994321040d2AcJ_JPEG/movie_image.jpg" alt="">
-            <img src="https://movie-phinf.pstatic.net/20190423_41/1555994321935RJdum_JPEG/movie_image.jpg" alt="">
-            <img src="https://movie-phinf.pstatic.net/20190423_151/1555994322346BRMOe_JPEG/movie_image.jpg" alt="">
+            <% for (let i = 0; i < docs.images.length; i++) { %>
+            <img src="<%= docs.images[i] %>" alt="<%= i %>">
+            <% } %>
           </div>
         </div>
-
+        <% if (docs.images.length) { %>
         <hr>
 
         <div class="related">
-          Watch More |
+          <% for (let i = 0; i < Object.keys(docs.related).length; i++) { %>
+          <span class="watchaMore" alt="<%= i %>"><a href="./<%= Object.keys(docs.related)[i] %>"><%= Object.values(docs.related)[i] %></a></span>
+          <% } %>
         </div>
+        <% } %>
     </div>
     </div>
     </div>
-    <script type="text/javascript" src="/javascripts/tempJs.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/javascripts/sid.js" charset="utf-8"></script>
+    <script src="/javascripts/sidinit.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      $('#heart').click(function(event) {
+        if ($('#heart').hasClass('emptyLikey')) {
+          $('#heart').removeClass('emptyLikey');
+          $.ajax({
+            url: '/api/v1/addLike/<%= docs.wid %>/<%= docs.title %>',
+            type: 'GET'
+          })
+          .done(function() {
+            $('#heart').addClass('emptyLikey');
+          })
+          .fail(function() {
+            alert('error');
+          })
+
+        } else {
+          $('#heart').addClass('emptyLikey');
+        }
+      });
+    </script>
 </body>
 
 </html>
