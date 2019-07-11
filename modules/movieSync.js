@@ -71,23 +71,40 @@ class HIVEMovieUpdater {
               }).then(response => {
                 const $ = cheerio.load(response.data.split('&quot;').join('"'));
                 const $result = $(".search_list_1 > li");
-                var naverid;
                 db.findMovie(watchaID[j], (err, res) => {
+                  var naverid = [];
                   $result.each(function(index, el) {
+                    let docs = {};
                     let yearlocal = 0;
-                    naverid = $(this).find($('dl > dt > a')).attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('');
+                    let link = $(this).find($('dl > dt > a'));
                     $(this).find($('dd.etc > a')).each(function(index, el) {
                       if ($(this).attr('href').includes('year')) {
                         yearlocal = $(this).text();
                       }
                     });
+                    console.log();
                     if (res.released == yearlocal) {
-                      db.updateMovie(watchaID[j], {
-                        nid: naverid
+                      docs[link.attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('')] = link.text().split('(')[1].split(')').join('');
+                      naverid.push({
+                        docs
                       });
                     }
                   });
+                  console.log(naverid);
+                  if (naverid.length === 1) {
+                    db.updateMovie(watchaID[j], {
+                      nid: Object.keys(naverid[0].docs)[0]
+                    });
+                  } else {
+                    for (var id in naverid) {
+                      if (Object.values(naverid[id].docs)[0] === res.title_en)
+                        db.updateMovie(watchaID[j], {
+                          nid: Object.keys(naverid[id].docs)[0]
+                        });
+                    }
+                  }
                 });
+
               }).catch(err => {
                 console.log('naverid' + title);
               })); // 네이버 영화 ID 처리
@@ -228,7 +245,7 @@ class HIVEMovieUpdater {
           let text = $nScore.text().replace(/(^\s*)|(\s*$)/gi, "");
           if (text) {
             db.updateMovie(watchaID, {
-              'critics.naver': $nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1
+              'critics.naver': ($nScore.text().replace(/(^\s*)|(\s*$)/gi, "") * 1).toFixed(1) * 1
             });
           }
         }).catch(err => {
