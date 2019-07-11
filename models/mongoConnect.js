@@ -55,12 +55,21 @@ exports.insertUser = (docs, callback) => {
   db.user.insertOne(docs, callback);
 };
 
+exports.updateUser = (pid, docs, callback) => {
+  db.user.updateOne({
+    pid: pid
+  }, {
+    $set: docs
+  }, callback);
+};
+
 exports.addLike = (sessid, docs, callback) => {
+  let doc = {};
+  doc['liked.' + Object.keys(docs)[0]] = docs[Object.keys(docs)[0]];
+  console.log(doc);
   db.user.updateOne({
     lastSession: sessid
   }, {
-    $push: {
-      'liked': docs
-    }
+    $push: doc
   }, callback);
 };
