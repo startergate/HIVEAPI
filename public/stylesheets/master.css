@@ -1,0 +1,31 @@
+.hidden {
+  display: none;
+}
+
+.userDropdown{
+  position: fixed;
+  list-style: none;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  right: 20px;
+  top: 80px;
+}
+
+.userDropdown li {
+  background-color: white;
+  padding: 3px 5px;
+  border: 1px solid gainsboro;
+}
+
+.userDropdown
+
+.userDropdown > a:first-child > li {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.userDropdown > a:last-child > li {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}

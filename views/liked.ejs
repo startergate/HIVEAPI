@@ -8,10 +8,16 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/bgStyle.css">
     <link rel="stylesheet" href="/stylesheets/scroll.css">
+    <link rel="stylesheet" href="/stylesheets/master.css">
 </head>
 <body class='bg bge bgImg'>
   <header class='fixed'>
-    <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+    <span class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></span>
+    <ul class='userDropdown hidden'>
+      <a href="/"><li>검색</li></a>
+      <a href="/user/liked"><li>좋아요 목록</li></a>
+      <a href="/user/logout"><li>로그아웃</li></a>
+    </ul>
   </header>
 
   <div class="covra2 warp liked">
@@ -19,8 +25,8 @@
         <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 인피니티 워</span><span class="searchType">영화</span></li></a>
         <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 엔드 게임</span><span class="searchType">영화</span></li></a>
         <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스</span><span class="searchType">영화</span></li></a>
-        
-        <% for (var i; i < 10; i++) { %>
+
+        <% for (let i; i < 10; i++) { %>
           <a class="searchA" href=""><li class="searchRow"><span class="searchTitle">어벤져스: 인피니티 워</span><span class="searchType">영화</span></li></a>
         <% } %>
       </ul>
@@ -32,31 +38,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="/javascripts/sid.js" charset="utf-8"></script>
   <script src="/javascripts/sidinit.js" charset="utf-8"></script>
+  <script src="/javascripts/userfavicon.js" charset="utf-8"></script>
   <script type="text/javascript">
-    $(document).ready(function() {
-      var liked = <%= liked %>;
-      var sid = new SID('HIVE');
-      var searchVal = $('.searchTerm').val();
-      if (searchVal == '') return;
-      $.ajax({
-        url: '/api/v1/search/' + searchVal,
-        type: 'GET',
-        dataType: 'json',
-      })
-      .done(function(data) {
-        for (var res in data.result) {
-          $('.searchTable').append("<a class='searchA' href=''><li class='searchRow'><span class='searchTitle'>" + data.result[res].title + "</span><span class='searchType'>" + data.result[res].type + "</span></li></a>");
-        }
-        console.log("Search Success");
-      })
-      .fail(function() {
-        console.log("Search Error");
-      })
-      .always(function() {
-        console.log("Search Finish");
-      });
-    });
-
+    var liked = '<%= liked %>';
+    liked = JSON.parse(liked.split('&#34;').join('"'));
+    for (let like in liked) {
+      $('.likedTable').append('<a class="searchA" href="/movie/' + like + '"><li class="searchRow"><span class="searchTitle">' + liked[like] + '</span></li></a>')
+    }
   </script>
 </body>
 </html>

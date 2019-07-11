@@ -17,9 +17,10 @@ router.get('/liked', (req, res, next) => {
     return;
   }
   movie.getLiked(req.session.pid, (liked) => {
+    let vars = JSON.stringify(liked);
     res.render('liked', {
       pid: req.session.pid,
-      liked: liked
+      liked: vars
     });
   });
 });
@@ -50,6 +51,14 @@ router.get('/auth', (req, res, next) => {
     console.log(err);
     res.redirect('/');
   });
+});
+
+router.get('/logout', (req, res, next) => {
+  sid.logout(req.session.clientid, req.session.sessid);
+  req.session.destroy(_ => {
+    req.session;
+  });
+  res.send('<script>history.back()</script>');
 });
 
 module.exports = router;

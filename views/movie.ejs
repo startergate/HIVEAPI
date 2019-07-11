@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/stylesheets/tempMovie.css">
     <link rel="stylesheet" href="/stylesheets/bgStyle.css">
     <link rel="stylesheet" href="/stylesheets/scroll.css">
+    <link rel="stylesheet" href="/stylesheets/master.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -17,7 +18,12 @@
       <% if (!session) { %>
       <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
       <% } else { %>
-      <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+      <span class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></span>
+      <ul class='userDropdown hidden'>
+        <a href="/"><li>검색</li></a>
+        <a href="/user/liked"><li>좋아요 목록</li></a>
+        <a href="/user/logout"><li>로그아웃</li></a>
+      </ul>
       <% } %>
     </header>
     <div class="box">
@@ -113,6 +119,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/javascripts/sid.js" charset="utf-8"></script>
     <script src="/javascripts/sidinit.js" charset="utf-8"></script>
+    <script src="/javascripts/userfavicon.js" charset="utf-8"></script>
     <script type="text/javascript">
       $('#heart').click(function(event) {
         if ($('#heart').hasClass('emptyLikey')) {
