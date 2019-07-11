@@ -21,7 +21,7 @@ router.get('/liked', (req, res, next) => {
       pid: req.session.pid,
       liked: liked
     });
-  })
+  });
 });
 
 router.get('/auth', (req, res, next) => {
@@ -31,13 +31,20 @@ router.get('/auth', (req, res, next) => {
     req.session.nickname = result.nickname;
     req.session.expire = result.expire;
     db.findUser(result.pid, (err, res) => {
-      if (res) return;
+      if (res) {
+        db.updateUser(result.pid, {
+          lastSession: result.sessid
+        }, err => {
+          console.log(err);
+        });
+        return;
+      }
       db.insertUser({
         pid: result.pid,
         lastSession: result.sessid,
         liked: {}
       });
-    })
+    });
     res.redirect('/');
   }).catch(err => {
     console.log(err);
