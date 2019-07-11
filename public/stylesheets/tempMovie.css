@@ -11,47 +11,18 @@ body{
     overflow: hidden;
 }
 
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
 * {box-sizing:border-box}
-
-/* Slideshow container */
-.slideshow-container {
-  max-width: 700px;
-  position: relative;
-  margin: auto;
-}
-
-/* Hide the images by default */
-.mySlides {
-  display: none;
-}
-
-/* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  margin-top: -22px;
-  padding: 16px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-}
 
 /* Position the "next button" to the right */
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
 }
-
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
-}
-
 
 /* Number text (1/3 etc) */
 .numbertext {
@@ -108,11 +79,12 @@ body{
   margin-top: 50vh;
   box-sizing: border-box;
   width: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
+  min-width: 815px;
+  background-color: rgba(255, 255, 255, 1);
   z-index: 9999;
   padding: 1rem;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 80px;
+  padding-right: 80px;
   padding-top: 3rem;
 }
 
@@ -209,6 +181,19 @@ body{
   background-color: white;
 }
 
+.metaCriticGreen {
+  background-color: #66cc33 !important;
+}
+
+.metaCriticYellow {
+  background-color: #ffcc33 !important;
+}
+
+.metaCriticRed {
+  background-color: #ff0000 !important;
+  color: white;
+}
+
 .criticPoint {
   padding: 8px 0px;
   width: 50px;
@@ -229,7 +214,6 @@ body{
 
 .vod {
   background-color: black;
-  width: 190px;
 }
 
 .vod img {
@@ -238,10 +222,22 @@ body{
   margin: 10px;
 }
 
+.watchaPlay {
+  width: 190px;
+}
+
+.amazonPrime {
+  width: 270px;
+}
+
 .wONWP {
     padding: 2px 0px;
     height: 50px;
     vertical-align: middle;
     font-size: 20px;
     color: white;
+}
+
+.flex {
+  display: flex;
 }

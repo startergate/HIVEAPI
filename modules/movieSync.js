@@ -11,7 +11,7 @@ class HIVEMovieUpdater {
     return /^[\x20-\x7F]*$/.test(string);
   }
 
-  movie(watchaID) {
+  movie(watchaID, callback = _ => {}) {
     if (watchaID.length < 1) return;
     // 왓챠 정보 열람 (제목, 년도, 영문 이름,)
     for (var i in watchaID) {
@@ -20,6 +20,7 @@ class HIVEMovieUpdater {
         if (err) throw err;
         if (res) {
           this.update(watchaID[j]);
+          callback();
           return;
         }
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
@@ -122,6 +123,7 @@ class HIVEMovieUpdater {
               });*/
               Promise.all(promises).then(_ => {
                 this.update(watchaID[j]);
+                callback();
               });
             });
           }).catch(err => {
@@ -137,6 +139,7 @@ class HIVEMovieUpdater {
   update(watchaID) {
     // 메타크리틱, 로튼 토마토, 네이버 영화, IMDB 스코어 업데이트
     const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
+    const instanceWatchaAPI = createInstance("https://api.watcha.com/api/");
     const instanceImdb = createInstance("https://www.imdb.com/");
     //const instanceRotten = createInstance("https://www.rottentomatoes.com/");
     const instanceNaver = createInstance("https://movie.naver.com/movie");
@@ -150,6 +153,12 @@ class HIVEMovieUpdater {
           const $ = cheerio.load(response.data.split('&quot;').join('"'));
           let $iScore = $('[itemprop=ratingValue]');
           let $mScore = $('.metacriticScore');
+          let $prime = $('.watch-option');
+          if ($prime.length > 0) {
+            db.updateMovie(watchaID, {
+              'vod.amazon': 'https://www.imdb.com' + $prime.attr('data-href')
+            });
+          }
           if ($mScore) {
             db.updateMovie(watchaID, {
               'critics.imdb': $iScore.text() * 1,
@@ -173,6 +182,9 @@ class HIVEMovieUpdater {
         let $wScore = $('.e1sxs7wr16');
         let $wPlay = $('.css-2hlxoa-Self.eq7vxcy0');
         let $wPlayTitle = $wPlay.find($('.css-13iaeui-Title'));
+        let $related1 = $('#root > div > div.css-d3s16q-NavContainer.ewsx4160 > section > div > div > div > div > div > div:nth-child(2) > div > div > section:nth-child(1) > div.css-wyngcf-ScrollBarContainer.e1f5xhlb0 > div.css-1fu2gqb-ScrollBar.e1f5xhlb1 > div > div > div > ul');
+        //console.log($related1);
+
         let wPlayExist = false;
         if ($wPlayTitle.text() === '왓챠플레이') {
           wPlayExist = true;
@@ -183,6 +195,28 @@ class HIVEMovieUpdater {
         });
       }).catch(err => {
         console.log('watcha critic');
+      });
+
+      instanceWatchaAPI.get(`/contents/${res.wid}/similars`, {
+        headers: {
+          'x-watcha-client': 'watcha-WebApp',
+          'x-watcha-client-language': 'ko',
+          'x-watcha-client-version': '1.0.0'
+        }
+      }).then(response => {
+        if (response.data.result.result.length) {
+          let movie = [];
+          let docs = {
+            related: {}
+          };
+          for (var i in response.data.result.result) {
+            movie.push(response.data.result.result[i].code);
+            docs.related[response.data.result.result[i].code] = response.data.result.result[i].title;
+          }
+          db.updateMovie(watchaID, docs);
+        }
+      }).catch(err => {
+        console.log(err);
       });
 
       if (res.hasOwnProperty('nid')) {

@@ -13,8 +13,11 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/movie/:wid', (req, res, next) => {
-  movie.getMovie(req.params.wid, (result) => {
-    res.render('movie');
+  movie.movie([req.params.wid], _ => {
+    movie.getMovie(req.params.wid, (result) => {
+      console.log(result);
+      res.render('movie');
+    });
   });
 });
 
