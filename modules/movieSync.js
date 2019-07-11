@@ -82,7 +82,6 @@ class HIVEMovieUpdater {
                         yearlocal = $(this).text();
                       }
                     });
-                    console.log();
                     if (res.released == yearlocal) {
                       docs[link.attr('href').split('/movie/bi/mi/basic.nhn?code=').join('').split('/').join('')] = link.text().split('(')[1].split(')').join('');
                       naverid.push({
@@ -90,7 +89,6 @@ class HIVEMovieUpdater {
                       });
                     }
                   });
-                  console.log(naverid);
                   if (naverid.length === 1) {
                     db.updateMovie(watchaID[j], {
                       nid: Object.keys(naverid[0].docs)[0]
@@ -350,9 +348,7 @@ class HIVEMovieUpdater {
   }
 
   getLiked(pid, callback) {
-    console.log(pid);
     db.findUser(pid, (err, res) => {
-      console.log(res);
       callback(res.liked);
     });
   }
