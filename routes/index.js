@@ -63,8 +63,8 @@ router.get('/movie/:wid', (req, res, next) => {
 
 router.get('/wait', (req, res, next) => {
   res.send(`Loading...<script>setTimeout(function () {
-    location.href = req.query.headTo
-  }, 1500);</script>`);
+    location.href = '${req.query.headTo}'
+  }, 10000);</script>`);
 });
 
 module.exports = router;
