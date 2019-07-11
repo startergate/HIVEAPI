@@ -115,8 +115,18 @@ router.get('/addLike/:wid/:title', (req, res, next) => {
   console.log(doc);
   db.addLike(req.session.sessid, doc, (err) => {
     console.log(err);
+    res.send();
   });
-  res.send();
+});
+
+router.get('/removeLike/:wid/:title', (req, res, next) => {
+  let doc = {};
+  doc[req.params.wid] = req.params.title;
+  console.log(doc);
+  db.removeLike(req.session.sessid, doc, (err) => {
+    console.log(err);
+    res.send();
+  });
 });
 
 module.exports = router;

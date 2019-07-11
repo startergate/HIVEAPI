@@ -28,7 +28,7 @@
     </header>
     <div class="box">
       <% if (session) { %>
-      <span class='fixed likey emptyLikey' id='heart'></span>
+      <span class='fixed likey' id='heart'></span>
       <% } %>
       <div class="title">
         <div class="poster">
@@ -67,7 +67,7 @@
               <% } %>
               <% if (docs.critics.metascore) {%>
               <a href="https://www.imdb.com/title/<%= docs.iid %>/criticreviews" target="_blank">
-                <div class="metacritic ratingBox metaCriticYellow">
+                <div class="metacritic ratingBox">
                   <img class="img-circle" src="https://pbs.twimg.com/profile_images/527528131171590144/EQXs3lpX_400x400.png" alt="">
                   <span class='criticPoint'><%= docs.critics.metascore %></span>
                 </div>
@@ -104,7 +104,7 @@
             <% } %>
           </div>
         </div>
-        <% if (docs.images.length) { %>
+        <% if (docs.related) { %>
         <hr>
 
         <div class="related">
@@ -129,23 +129,40 @@
             type: 'GET'
           })
           .done(function() {
-            $('#heart').addClass('emptyLikey');
           })
           .fail(function() {
             alert('error');
-          })
-
+          });
         } else {
           $('#heart').addClass('emptyLikey');
+          $.ajax({
+            url: '/api/v1/removeLike/<%= docs.wid %>/<%= docs.title %>',
+            type: 'GET'
+          })
+          .done(function() {
+          })
+          .fail(function() {
+            alert('error');
+          });
         }
       });
       <% if (locals.liked) { %>
       var liked = '<%= liked %>';
       liked = JSON.parse(liked.split('&#34;').join('"'));
-      if (!('<%= docs.wid %>' in Object.keys(liked))) {
+      if (!('<%= docs.wid %>' in liked)) {
+        console.log(('<%= docs.wid %>' in liked));
         $('#heart').addClass('emptyLikey');
       }
       <% } %>
+      var metaCritic = $('.metacritic.ratingBox')[0].innerText * 1
+      if (metaCritic > 60) {
+        $('.metacritic.ratingBox').addClass('metaCriticGreen')
+      } else if (metaCritic > 40) {
+        $('.metacritic.ratingBox').addClass('metaCriticYellow')
+      } else {
+        $('.metacritic.ratingBox').addClass('metaCriticRed')
+      }
+      console.log($('.metacritic.ratingBox')[0].innerText)
     </script>
 </body>
 
