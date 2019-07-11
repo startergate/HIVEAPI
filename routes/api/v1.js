@@ -5,6 +5,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const createInstance = require('../../models/axiosRequest');
 const movie = require('../../modules/movieSync');
+const db = require('../../models/mongoConnect');
 const router = express.Router();
 
 /* GET home page. */
@@ -107,4 +108,15 @@ router.get('/movie/imdb/:id', (req, res, next) => {
 router.get('/id/:movie', (req, res, next) => {
 
 });
+
+router.get('/addLike/:wid/:title', (req, res, next) => {
+  let doc = {};
+  doc[req.params.wid] = req.params.title;
+  console.log(doc);
+  db.addLike(req.session.sessid, doc, (err) => {
+    console.log(err);
+  });
+  res.send();
+});
+
 module.exports = router;
