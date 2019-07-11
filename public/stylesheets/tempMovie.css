@@ -1,8 +1,8 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+KR);
 
 body{
     background-color: #fff;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     overflow-x: hidden;
     overflow-y: auto;
     width: 100vw;
@@ -82,10 +82,7 @@ a{
   min-width: 815px;
   background-color: rgba(255, 255, 255, 1);
   z-index: 9999;
-  padding: 1rem;
-  padding-left: 80px;
-  padding-right: 80px;
-  padding-top: 3rem;
+  padding: 50px 80px;
 }
 
 .poster {
@@ -113,7 +110,6 @@ a{
 .movie{
   font-weight: bold;
   font-size: 28px;
-  letter-spacing: 4px;
   display: inline;
   vertical-align: top;
 }
@@ -234,10 +230,59 @@ a{
     padding: 2px 0px;
     height: 50px;
     vertical-align: middle;
-    font-size: 20px;
+    font-size: 18px;
     color: white;
 }
 
 .flex {
   display: flex;
+}
+
+.related {
+  overflow: scroll;
+}
+
+.watchaMore{
+  display: inline-block;
+  padding: 1px 25px;
+  background-color: Gainsboro;
+  border-radius: 3px;
+  margin: 2px 2px;
+}
+
+.login{
+  position: fixed;
+    color: #fff;
+    padding: 0;
+    border: none;
+    background: none;
+    font-weight: bold;
+    font-size: 10pt;
+    position: fixed;
+    right: 1%;
+    top: 2%;
+    text-decoration: none;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.likey {
+    background-image:url(/images/like.svg);
+    width: 30px;
+    height: 30px;
+    right: 90px;
+    top: 60px;
+}
+
+.emptyLikey {
+  background-image:url(/images/likeEmpty.svg) !important;
+}
+
+.profileImg {
+  width: 50px;
+  border-radius: 25px;
+  border: 1px solid white;
+  box-sizing: border-box;
 }
