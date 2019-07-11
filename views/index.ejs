@@ -10,11 +10,11 @@
 </head>
 <body class='bg bge bgImg'>
   <header class='fixed'>
-      <% if (!session) { %>
-      <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
-      <% } else { %>
-      <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
-      <% } %>
+    <% if (!session) { %>
+    <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
+    <% } else { %>
+    <a href='./user/liked' class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></a>
+    <% } %>
   </header>
 
   <div class="covra warp">

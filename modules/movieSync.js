@@ -199,8 +199,6 @@ class HIVEMovieUpdater {
         let $wScore = $('.e1sxs7wr16');
         let $wPlay = $('.css-2hlxoa-Self.eq7vxcy0');
         let $wPlayTitle = $wPlay.find($('.css-13iaeui-Title'));
-        let $related1 = $('#root > div > div.css-d3s16q-NavContainer.ewsx4160 > section > div > div > div > div > div > div:nth-child(2) > div > div > section:nth-child(1) > div.css-wyngcf-ScrollBarContainer.e1f5xhlb0 > div.css-1fu2gqb-ScrollBar.e1f5xhlb1 > div > div > div > ul');
-        //console.log($related1);
 
         let wPlayExist = false;
         if ($wPlayTitle.text() === '왓챠플레이') {
