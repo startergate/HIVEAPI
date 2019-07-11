@@ -16,7 +16,20 @@ router.get('/movie/:wid', (req, res, next) => {
   movie.movie([req.params.wid], _ => {
     movie.getMovie(req.params.wid, (result) => {
       console.log(result);
-      res.render('movie');
+      if (result.images) {
+        res.render('movie', {
+          session: !!req.session.sessid,
+          pid: req.session.pid,
+          docs: result,
+          bgImg: result.images[Math.floor(Math.random() * result.images.length)]
+        });
+      } else {
+        res.render('movie', {
+          session: !!req.session.sessid,
+          pid: req.session.pid,
+          docs: result
+        });
+      }
     });
   });
 });
