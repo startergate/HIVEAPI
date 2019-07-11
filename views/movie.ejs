@@ -139,6 +139,13 @@
           $('#heart').addClass('emptyLikey');
         }
       });
+      <% if (locals.liked) { %>
+      var liked = '<%= liked %>';
+      liked = JSON.parse(liked.split('&#34;').join('"'));
+      if (!('<%= docs.wid %>' in Object.keys(liked))) {
+        $('#heart').addClass('emptyLikey');
+      }
+      <% } %>
     </script>
 </body>
 

@@ -12,23 +12,48 @@ router.get('/', (req, res, next) => {
   });
 });
 
+router.get('/movie', (req, res, next) => {
+  res.redirect('/');
+});
+
 router.get('/movie/:wid', (req, res, next) => {
   movie.movie([req.params.wid], _ => {
     movie.getMovie(req.params.wid, (result) => {
-      console.log(result);
-      if (result.images) {
-        res.render('movie', {
-          session: !!req.session.sessid,
-          pid: req.session.pid,
-          docs: result,
-          bgImg: result.images[Math.floor(Math.random() * result.images.length)]
+      if (req.session.sessid) {
+        movie.getLiked(req.session.pid, (liked) => {
+          let vars = JSON.stringify(liked);
+          if (result.images) {
+            res.render('movie', {
+              session: !!req.session.sessid,
+              pid: req.session.pid,
+              docs: result,
+              bgImg: result.images[Math.floor(Math.random() * result.images.length)],
+              liked: vars
+            });
+          } else {
+            res.render('movie', {
+              session: !!req.session.sessid,
+              pid: req.session.pid,
+              docs: result,
+              liked: vars
+            });
+          }
         });
       } else {
-        res.render('movie', {
-          session: !!req.session.sessid,
-          pid: req.session.pid,
-          docs: result
-        });
+        if (result.images) {
+          res.render('movie', {
+            session: !!req.session.sessid,
+            pid: req.session.pid,
+            docs: result,
+            bgImg: result.images[Math.floor(Math.random() * result.images.length)]
+          });
+        } else {
+          res.render('movie', {
+            session: !!req.session.sessid,
+            pid: req.session.pid,
+            docs: result
+          });
+        }
       }
     });
   });

@@ -349,6 +349,9 @@ class HIVEMovieUpdater {
 
   getLiked(pid, callback) {
     db.findUser(pid, (err, res) => {
+      if (err) {
+        return;
+      }
       callback(res.liked);
     });
   }
