@@ -12,7 +12,9 @@
 <body class='bg bge bgImg'>
   <header class='fixed'>
     <% if (!session) { %>
-    <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
+    <span class='login'>
+      <a href='http://sid.donote.co:3000/user/login?' class="realLogin">로그인</a>
+    </span>
     <% } else { %>
     <span class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></span>
     <ul class='userDropdown hidden'>

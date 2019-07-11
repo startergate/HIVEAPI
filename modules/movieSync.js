@@ -11,7 +11,7 @@ class HIVEMovieUpdater {
     return /^[\x20-\x7F]*$/.test(string);
   }
 
-  movie(watchaID, callback = _ => {}) {
+  movie(watchaID, callback = _ => {}, callback2 = _ => {}) {
     if (watchaID.length < 1) return;
     // 왓챠 정보 열람 (제목, 년도, 영문 이름,)
     for (var i in watchaID) {
@@ -23,6 +23,7 @@ class HIVEMovieUpdater {
           callback();
           return;
         }
+        callback2();
         const instanceWatcha = createInstance("https://watcha.com/ko-KR/");
         const instanceImdb = createInstance("https://www.imdb.com/");
         //const instanceRotten = createInstance("https://www.rottentomatoes.com/");

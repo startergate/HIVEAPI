@@ -16,7 +16,10 @@
 <body class='bg bge bgImg' <% if (locals.bgImg) { %>style='background-image: url(<%= bgImg %>)' <% } %>>
     <header class='fixed'>
       <% if (!session) { %>
-      <a href='http://sid.donote.co:3000/user/login?' class="login realLogin">로그인</a>
+      <span class='login'>
+        <a href='http://sid.donote.co:3000/user/login?' class="realLogin">로그인</a> |
+        <a href='/'>검색</a>
+      </span>
       <% } else { %>
       <span class="login"><img src="http://35.221.127.218:3000/profile/img/<%= pid %>" alt="" class='profileImg'></span>
       <ul class='userDropdown hidden'>
@@ -95,6 +98,7 @@
             </div>
           </div>
         </div>
+        <% if (docs.image) { %>
         <hr>
 
         <div class="image">
@@ -104,6 +108,7 @@
             <% } %>
           </div>
         </div>
+        <% } %>
         <% if (docs.related) { %>
         <hr>
 
