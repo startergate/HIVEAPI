@@ -1,4 +1,4 @@
-var sid = new SID('HIVE');
+let sid = new SID('HIVE');
 if (!localStorage.sid_clientid) {
   sid.createClientID(navigator.userAgent);
 }
