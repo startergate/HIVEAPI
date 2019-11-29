@@ -29,7 +29,7 @@ yarn
 ## Built With / 누구랑 만들었나요?
 
 * [startergate](https://github.com/startergate) - 개발
-* [JEONG-MW](https://github.com/Jeong-Mw) - 디자인 도움
+* [JEONG-MW](https://github.com/Jeong-Mw) - 디자인
 
 ## License / 라이센스
 
